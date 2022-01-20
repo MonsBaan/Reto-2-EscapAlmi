@@ -11,12 +11,17 @@ public class MainMenuController : MonoBehaviour {
     public int quickSaveSlotID;
 
     [Header("Options Panel")]
-    public GameObject MainOptionsPanel;
-    public GameObject StartGameOptionsPanel;
-    public GameObject GamePanel;
-    public GameObject ControlsPanel;
-    public GameObject GfxPanel;
-    public GameObject LoadGamePanel;
+    public GameObject OpcionesAjustes;
+    public GameObject JugarMenu;
+    public GameObject OpcionesAjustesGame;
+    public GameObject OpcionesAjustesControles;
+    public GameObject OpcionesAjustesGraficos;
+    public GameObject JugarMenuConectarse;
+    public GameObject MenuInventario;
+    public GameObject MenuTienda;
+    public GameObject MenuLogin;
+    public GameObject MenuPerfil;
+
 
     // Use this for initialization
     void Start () {
@@ -26,30 +31,16 @@ public class MainMenuController : MonoBehaviour {
         PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
     }
 
-    #region Open Different panels
-
-    public void openOptions()
-    {
-        //enable respective panel
-        MainOptionsPanel.SetActive(true);
-        StartGameOptionsPanel.SetActive(false);
-
-        //play anim for opening main options panel
-        anim.Play("buttonTweenAnims_on");
-
-        //play click sfx
-        playClickSound();
-
-        //enable BLUR
-        //Camera.main.GetComponent<Animator>().Play("BlurOn");
-       
-    }
-
+    #region Botones Main Menu
     public void openStartGameOptions()
     {
         //enable respective panel
-        MainOptionsPanel.SetActive(false);
-        StartGameOptionsPanel.SetActive(true);
+        OpcionesAjustes.SetActive(false);
+        JugarMenu.SetActive(true);
+        MenuTienda.SetActive(false);
+        MenuLogin.SetActive(false);
+        MenuPerfil.SetActive(false);
+        MenuInventario.SetActive(false);
 
         //play anim for opening main options panel
         anim.Play("buttonTweenAnims_on");
@@ -59,16 +50,143 @@ public class MainMenuController : MonoBehaviour {
 
         //enable BLUR
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
-        
+
+    }
+    public void openContinue_Load()
+    {
+        //enable respective panel
+        OpcionesAjustesGame.SetActive(false);
+        OpcionesAjustesControles.SetActive(false);
+        OpcionesAjustesGraficos.SetActive(false);
+        JugarMenuConectarse.SetActive(true);
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void openInventario()
+    {
+        //enable respective panel
+        OpcionesAjustes.SetActive(false);
+        JugarMenu.SetActive(false);
+        MenuTienda.SetActive(false);
+        MenuLogin.SetActive(false);
+        MenuPerfil.SetActive(false);
+        MenuInventario.SetActive(true);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
+    }
+    public void openTienda()
+    {
+        //enable respective panel
+        OpcionesAjustes.SetActive(false);
+        JugarMenu.SetActive(false);
+        MenuTienda.SetActive(true);
+        MenuLogin.SetActive(false);
+        MenuPerfil.SetActive(false);
+        MenuInventario.SetActive(false);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
+    }
+    public void openLogin()
+    {
+        //enable respective panel
+        OpcionesAjustes.SetActive(false);
+        JugarMenu.SetActive(false);
+        MenuTienda.SetActive(false);
+        MenuLogin.SetActive(true);
+        MenuPerfil.SetActive(false);
+        MenuInventario.SetActive(false);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
+    }
+    public void openPerfil()
+    {
+        //enable respective panel
+        OpcionesAjustes.SetActive(false);
+        JugarMenu.SetActive(false);
+        MenuTienda.SetActive(false);
+        MenuLogin.SetActive(false);
+        MenuPerfil.SetActive(true);
+        MenuInventario.SetActive(false);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
+    }
+    public void newGame()
+    {
+        if (!string.IsNullOrEmpty("InGame"))
+            SceneManager.LoadScene("InGame");
+        else
+            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
+                "add that scene in the Build Settings!");
+    }
+    #endregion
+
+    #region Ajustes
+    public void openOptions()
+    {
+        //enable respective panel
+        OpcionesAjustes.SetActive(true);
+        JugarMenu.SetActive(false);
+        MenuTienda.SetActive(false);
+        MenuLogin.SetActive(false);
+        MenuPerfil.SetActive(false);
+        MenuInventario.SetActive(false);
+
+        //play anim for opening main options panel
+        anim.Play("buttonTweenAnims_on");
+
+        //play click sfx
+        playClickSound();
+
+        //enable BLUR
+        //Camera.main.GetComponent<Animator>().Play("BlurOn");
+
     }
 
     public void openOptions_Game()
     {
         //enable respective panel
-        GamePanel.SetActive(true);
-        ControlsPanel.SetActive(false);
-        GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(false);
+        OpcionesAjustesGame.SetActive(true);
+        OpcionesAjustesControles.SetActive(false);
+        OpcionesAjustesGraficos.SetActive(false);
+        JugarMenuConectarse.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -80,10 +198,10 @@ public class MainMenuController : MonoBehaviour {
     public void openOptions_Controls()
     {
         //enable respective panel
-        GamePanel.SetActive(false);
-        ControlsPanel.SetActive(true);
-        GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(false);
+        OpcionesAjustesGame.SetActive(false);
+        OpcionesAjustesControles.SetActive(true);
+        OpcionesAjustesGraficos.SetActive(false);
+        JugarMenuConectarse.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -95,10 +213,10 @@ public class MainMenuController : MonoBehaviour {
     public void openOptions_Gfx()
     {
         //enable respective panel
-        GamePanel.SetActive(false);
-        ControlsPanel.SetActive(false);
-        GfxPanel.SetActive(true);
-        LoadGamePanel.SetActive(false);
+        OpcionesAjustesGame.SetActive(false);
+        OpcionesAjustesControles.SetActive(false);
+        OpcionesAjustesGraficos.SetActive(true);
+        JugarMenuConectarse.SetActive(false);
 
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
@@ -106,31 +224,6 @@ public class MainMenuController : MonoBehaviour {
         //play click sfx
         playClickSound();
 
-    }
-
-    public void openContinue_Load()
-    {
-        //enable respective panel
-        GamePanel.SetActive(false);
-        ControlsPanel.SetActive(false);
-        GfxPanel.SetActive(false);
-        LoadGamePanel.SetActive(true);
-
-        //play anim for opening game options panel
-        anim.Play("OptTweenAnim_on");
-
-        //play click sfx
-        playClickSound();
-
-    }
-
-    public void newGame()
-    {
-        if (!string.IsNullOrEmpty("InGame"))
-            SceneManager.LoadScene("InGame");
-        else
-            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
-                "add that scene in the Build Settings!");
     }
     #endregion
 
