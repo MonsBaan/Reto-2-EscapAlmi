@@ -63,6 +63,7 @@
     <Compile Include="Assets\MazeGenerator\Scripts\DivisionMazeGenerator.cs" />
     <Compile Include="Assets\MazeGenerator\Scripts\TreeMazeGenerator.cs" />
     <Compile Include="Assets\RestClient\Packages\RSG.Promise\Exceptions\PromiseException.cs" />
+    <Compile Include="Assets\Scripts\cambiarEscena.cs" />
     <Compile Include="Assets\RestClient\Packages\Proyecto26.RestClient\RestClientPromise.cs" />
     <Compile Include="Assets\MazeGenerator\Scripts\MazeCell.cs" />
     <Compile Include="Assets\RestClient\Packages\RSG.Promise\PromiseHelpers.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="Assets\RestClient\Packages\Proyecto26.RestClient\Helpers\Extensions.cs" />
     <Compile Include="Assets\MazeGenerator\Scripts\OldestTreeMazeGenerator.cs" />
     <Compile Include="Assets\MazeGenerator\Scripts\RecursiveTreeMazeGenerator.cs" />
-    <Compile Include="Assets\Scripts\cambiarEscena.cs" />
+    <Compile Include="Assets\EasyMainMenu\Scripts\Main Menu Scripts\MainMenuController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
