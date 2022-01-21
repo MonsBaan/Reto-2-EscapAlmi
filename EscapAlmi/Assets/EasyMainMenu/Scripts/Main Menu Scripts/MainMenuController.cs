@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour {
 
@@ -22,6 +24,9 @@ public class MainMenuController : MonoBehaviour {
     public GameObject MenuLogin;
     public GameObject MenuPerfil;
 
+    public static bool esServer;
+    public static string ipServer;
+    public GameObject ipInput;
 
     // Use this for initialization
     void Start () {
@@ -148,14 +153,30 @@ public class MainMenuController : MonoBehaviour {
         //Camera.main.GetComponent<Animator>().Play("BlurOn");
 
     }
+
     public void newGame()
     {
-        if (!string.IsNullOrEmpty("InGame"))
+        if (!string.IsNullOrEmpty("InGame")) { 
             SceneManager.LoadScene("InGame");
+            esServer = true;
+        }
         else
             Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
                 "add that scene in the Build Settings!");
     }
+    public void newGameClient()
+    {
+        if (!string.IsNullOrEmpty("InGame"))
+        {
+            SceneManager.LoadScene("InGame");
+            esServer = false;
+            ipServer = ipInput.GetComponent<Text>().text;
+        }
+        else
+            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
+                "add that scene in the Build Settings!");
+    }
+
     #endregion
 
     #region Ajustes

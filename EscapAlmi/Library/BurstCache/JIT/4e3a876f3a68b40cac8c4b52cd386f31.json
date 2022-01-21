@@ -1,0 +1,8 @@
+{
+  "ExternalFunctions": [
+    {
+      "Name": "Unity.Collections.LowLevel.Unsafe.UnsafeUtility::Malloc",
+      "FullName": "Unity.Collections.LowLevel.Unsafe.UnsafeUtility.Malloc(long size, int alignment, Unity.Collections.Allocator allocator) -> void*_20a9cc183c0d7a6a08efa9ab541a2018"
+    }
+  ]
+}

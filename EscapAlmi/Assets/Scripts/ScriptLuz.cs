@@ -10,6 +10,7 @@ public class ScriptLuz : MonoBehaviour
     void Start()
     {
         miTransform = this.transform;
+        jugador = GameObject.Find("Jugador");
     }
 
     // Update is called once per frame

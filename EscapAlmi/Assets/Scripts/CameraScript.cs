@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    public GameObject jugador, camara;
+    public GameObject camara, jugadorREAL;
 
     private Transform camaraTransform;
     void Start()
@@ -15,7 +15,7 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 posJugador = jugador.transform.position;
+        Vector3 posJugador = jugadorREAL.transform.position;
         posJugador.y = posJugador.y + 20;
         camaraTransform.position = posJugador;
     }

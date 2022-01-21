@@ -62,6 +62,7 @@
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\ExecuteOnMainThread.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\BasicMazeGenerator.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\DivisionMazeGenerator.cs" />
+    <Compile Include="Assets\Scripts\Server.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\TreeMazeGenerator.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\Exceptions\PromiseException.cs" />
     <Compile Include="Assets\Scripts\cambiarEscena.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\PromiseTimer.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\Tuple.cs" />
+    <Compile Include="Assets\Scripts\NetworkMessages.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\RequestHelperExtension.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\StaticCoroutine.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\RecursiveMazeGenerator.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\Extensions.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\OldestTreeMazeGenerator.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\RecursiveTreeMazeGenerator.cs" />
+    <Compile Include="Assets\Scripts\NetworkClient.cs" />
+    <Compile Include="Assets\Scripts\ElegirMapa.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -311,6 +315,24 @@
     </Reference>
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.26f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Collections.LowLevel.ILSupport">
+      <HintPath>Library\PackageCache\com.unity.collections@1.1.0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Mdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Pdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Rocks">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
@@ -666,6 +688,10 @@
       <Project>{3B381EDE-38B5-CB45-396C-8FA80AAF4F15}</Project>
       <Name>Unity.VSCode.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Burst.csproj">
+      <Project>{73DFADCA-03CB-A661-7975-024B685AA6A9}</Project>
+      <Name>Unity.Burst</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
       <Project>{98C7D8EA-CED4-A8FF-051B-B43FFBDE7F7B}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
@@ -686,13 +712,25 @@
       <Project>{25732FB7-4B6C-FF3F-BC53-600C30FC70AA}</Project>
       <Name>Unity.TextMeshPro</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Mathematics.Editor.csproj">
+      <Project>{6D87BAD2-F270-30FD-5E53-35BD36BF1AEE}</Project>
+      <Name>Unity.Mathematics.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Burst.Editor.csproj">
+      <Project>{4321B4FC-CC74-1F14-F249-0FB063BBD889}</Project>
+      <Name>Unity.Burst.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Collections.csproj">
+      <Project>{AD5ED73D-DA55-D96D-7D14-BBB8C164177F}</Project>
+      <Name>Unity.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Networking.Editor.csproj">
+      <Project>{36A2C352-6D6F-3F8F-F177-9AE58643A24E}</Project>
+      <Name>Unity.Networking.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{0DAAF99B-AB68-F59A-1672-47E9CE079A32}</Project>
       <Name>UnityEditor.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{3688DDF9-0E28-7D1C-1CD7-3CA57CDD78B8}</Project>
-      <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Rider.Editor.csproj">
       <Project>{CDAABC54-D616-9C22-D447-A4EC2671CBE0}</Project>
@@ -701,6 +739,18 @@
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{0560921D-0A1A-6F5E-32F8-241DE50EAE0C}</Project>
       <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
+      <Project>{3688DDF9-0E28-7D1C-1CD7-3CA57CDD78B8}</Project>
+      <Name>Unity.PlasticSCM.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Networking.Transport.csproj">
+      <Project>{A1535336-D5D6-5665-6573-67BE8857A165}</Project>
+      <Name>Unity.Networking.Transport</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Mathematics.csproj">
+      <Project>{0FFAB131-0B56-3222-FE36-30E0F86CBA11}</Project>
+      <Name>Unity.Mathematics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

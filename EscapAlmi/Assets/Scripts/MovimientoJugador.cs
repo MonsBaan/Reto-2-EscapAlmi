@@ -8,6 +8,7 @@ public class MovimientoJugador : MonoBehaviour
     // Start is called before the first frame update
     private Transform miTransform;
     public int velocidad;
+
     void Start()
     {
         miTransform = this.transform;
@@ -16,10 +17,7 @@ public class MovimientoJugador : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         movimientoPersonaje();
-
-
     }
 
 
