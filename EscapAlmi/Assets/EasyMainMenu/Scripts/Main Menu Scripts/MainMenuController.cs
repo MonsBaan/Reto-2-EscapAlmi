@@ -19,6 +19,7 @@ public class MainMenuController : MonoBehaviour {
     public GameObject OpcionesAjustesControles;
     public GameObject OpcionesAjustesGraficos;
     public GameObject JugarMenuConectarse;
+    public GameObject JugarMenuSalaEspera;
     public GameObject MenuInventario;
     public GameObject MenuTienda;
     public GameObject MenuLogin;
@@ -64,7 +65,47 @@ public class MainMenuController : MonoBehaviour {
         OpcionesAjustesControles.SetActive(false);
         OpcionesAjustesGraficos.SetActive(false);
         JugarMenuConectarse.SetActive(true);
+        JugarMenuSalaEspera.SetActive(false);
 
+
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void openSalaEsperaHostear()
+    {
+        //enable respective panel
+        OpcionesAjustesGame.SetActive(false);
+        OpcionesAjustesControles.SetActive(false);
+        OpcionesAjustesGraficos.SetActive(false);
+        JugarMenuConectarse.SetActive(false);
+        JugarMenuSalaEspera.SetActive(true);
+
+        JugarMenuSalaEspera.GetComponent<ScriptSalaEsperaCliente>().enabled = false;
+        JugarMenuSalaEspera.GetComponent<ServerSalaEspera>().enabled = true;
+        //play anim for opening game options panel
+        anim.Play("OptTweenAnim_on");
+
+        //play click sfx
+        playClickSound();
+
+    }
+
+    public void openSalaEsperaUnirse()
+    {
+        //enable respective panel
+        OpcionesAjustesGame.SetActive(false);
+        OpcionesAjustesControles.SetActive(false);
+        OpcionesAjustesGraficos.SetActive(false);
+        JugarMenuConectarse.SetActive(false);
+        JugarMenuSalaEspera.SetActive(true);
+
+        JugarMenuSalaEspera.GetComponent<ScriptSalaEsperaCliente>().enabled = true;
+        JugarMenuSalaEspera.GetComponent<ServerSalaEspera>().enabled = false;
         //play anim for opening game options panel
         anim.Play("OptTweenAnim_on");
 
@@ -154,16 +195,6 @@ public class MainMenuController : MonoBehaviour {
 
     }
 
-    public void newGame()
-    {
-        if (!string.IsNullOrEmpty("InGame")) { 
-            SceneManager.LoadScene("InGame");
-            esServer = true;
-        }
-        else
-            Debug.Log("Please write a scene name in the 'newGameSceneName' field of the Main Menu Script and don't forget to " +
-                "add that scene in the Build Settings!");
-    }
     public void newGameClient()
     {
         if (!string.IsNullOrEmpty("InGame"))

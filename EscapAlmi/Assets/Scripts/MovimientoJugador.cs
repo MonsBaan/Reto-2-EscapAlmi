@@ -11,13 +11,28 @@ public class MovimientoJugador : MonoBehaviour
 
     void Start()
     {
-        miTransform = this.transform;
+        if (this.gameObject.name == "JugadorReal")
+        {
+            miTransform = this.transform;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        movimientoPersonaje();
+        if (this.gameObject.name == "JugadorReal")
+        {
+            movimientoPersonaje();
+
+            if (MainMenuController.esServer)
+            {
+                GameObject.Find("Server").GetComponent<Server>().movimiento(this.gameObject.transform.position, this.gameObject.transform.rotation);
+            }
+            else
+            {
+                GameObject.Find("Cliente").GetComponent<NetworkClient>().movimiento(this.gameObject.transform.position, this.gameObject.transform.rotation);
+            }
+        }
     }
 
 

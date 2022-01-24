@@ -53,52 +53,52 @@
     <UnityVersion>2020.3.26f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\UnityTransportProtocol.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\HMACSHA256.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\AtomicFreeList.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkDriver.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayServerData.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\INetworkInterface.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageRelay.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\BaselibNetworkArray.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\SecureProtocol\SecureNetworkProtocol.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Base64.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayNetworkProtocol.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkParams.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageConnectRequest.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Utilities.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\IPCManager.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\ReliableUtility.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkPipeline.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\FragmentationUtility.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageBind.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\NullPipelineStage.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkProtocols.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\SessionIdToken.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkSettings.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\UnreliableSequencedPipelineStage.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkConnection.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\BaselibNetworkInterface.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkCompressionModel.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\IPCNetworkInterface.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\TransportFunctionPointer.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessagePing.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkProtocol.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\FragmentationPipelineStage.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\ReliableSequencedPipelineStage.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\SimulatorUtility.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\DataStream.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayConnectionData.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayHMACKey.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageDisconnect.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\SHA256.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkEventQueue.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageHeader.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\UnityTransportProtocol.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\AtomicFreeList.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkDriver.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\SecureProtocol\SecureNetworkProtocol.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkParams.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkPipeline.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkProtocols.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\SessionIdToken.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\UnreliableSequencedPipelineStage.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\BaselibNetworkInterface.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\FragmentationPipelineStage.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\DataStream.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\SimulatorPipelineStage.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageAccepted.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayAllocationId.cs" />
-    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageHeader.cs" />
     <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkEndPoint.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayServerData.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Base64.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageConnectRequest.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayHMACKey.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\Messages\RelayMessageDisconnect.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\HMACSHA256.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\INetworkInterface.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\BaselibNetworkArray.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayNetworkProtocol.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\IPCManager.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\FragmentationUtility.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\NullPipelineStage.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkSettings.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkCompressionModel.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkProtocol.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Pipelines\SimulatorUtility.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\NetworkEventQueue.cs" />
+    <Compile Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Relay\RelayAllocationId.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\PackageCache\com.unity.transport@1.0.0-pre.10\Runtime\Unity.Networking.Transport.asmdef" />
@@ -338,6 +338,9 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Collections.LowLevel.ILSupport">
+      <HintPath>Library\PackageCache\com.unity.collections@1.1.0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -347,29 +350,26 @@
     <Reference Include="unityplastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
     </Reference>
-    <Reference Include="log4netPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Collections.LowLevel.ILSupport">
-      <HintPath>Library\PackageCache\com.unity.collections@1.1.0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Burst.Cecil.Pdb">
-      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Mdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Burst.Cecil.Pdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst.Cecil">
       <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="log4netPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.26f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>

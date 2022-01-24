@@ -121,8 +121,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Utilities\TrackResourceCache.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\inspectors\EditorClipFactory.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\treeview\ManipulationsClips.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\treeview\Drawers\InfiniteTrackDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Manipulators\Sequence\Jog.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\treeview\Drawers\InfiniteTrackDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Shortcuts.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Window\TimelineWindowTimeControl.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Window\TimelineWindow_EditorCallbacks.cs" />
@@ -184,8 +184,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Manipulators\Sequence\EaseClip.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Window\ViewModel\TimelineWindowViewPrefs.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Window\TimelineWindow_PlayableLookup.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Utilities\Scopes\GUIViewportScope.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Activation\ActivationTrackInspector.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Utilities\Scopes\GUIViewportScope.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Manipulators\Utils\ManipulatorsUtils.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Window\TimelineWindow_ActiveTimeline.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Extensions\AnimationTrackExtensions.cs" />
@@ -277,8 +277,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Manipulators\TimeAreaAutoPanner.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Signals\TreeView\SignalListFactory.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Playables\ControlPlayableInspector.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\treeview\Manipulator.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Window\TimelineWindow_HeaderGui.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\treeview\Manipulator.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\inspectors\ClipInspector\ClipInspectorSelectionInfo.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\DirectorStyles.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.4.8\Editor\Manipulators\AddDelete\AddDeleteItemModeRipple.cs" />
@@ -551,17 +551,35 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Collections.LowLevel.ILSupport">
+      <HintPath>Library\PackageCache\com.unity.collections@1.1.0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.7\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.7\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="unityplastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.7\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Mdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Pdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="log4netPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.7\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.9\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Rocks">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>

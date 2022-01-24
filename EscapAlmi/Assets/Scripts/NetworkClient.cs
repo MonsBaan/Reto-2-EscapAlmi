@@ -6,7 +6,7 @@ using Unity.Collections;
 using System.Text;
 using Unity.Networking.Transport;
 using UnityEngine.UI;
-using NetworkMessages;
+using NetworkObject.NetworkMessages;
 using NetworkObject;
 using System;
 
@@ -20,6 +20,7 @@ public class NetworkClient : MonoBehaviour
     public GameObject prefabJugador;
 
     private string idPlayer;
+    private bool jugadorRealCreado = false;
 
     void Start()
     {
@@ -103,20 +104,50 @@ public class NetworkClient : MonoBehaviour
 
                 GameObject.Find("Mapas").GetComponent<ElegirMapa>().cargarMapa(readyMsg.indexMap);
 
-                if(jugadoresGameObject.Count < readyMsg.playerList.Count)
+                int indexJug = jugadoresGameObject.Count;
+                for (int i = 0; i < (readyMsg.playerList.Count - indexJug); i++)
                 {
-                    for (int i = 0; i < (readyMsg.playerList.Count - jugadoresGameObject.Count); i++)
-                    {
-                        jugadoresGameObject.Add(prefabJugador);
-                    }
+                    GameObject nuevoPlayer = Instantiate(prefabJugador);
+                    nuevoPlayer.transform.position = new Vector3(readyMsg.playerList[indexJug + i].posJugador.x, 2, readyMsg.playerList[indexJug + i].posJugador.z);
+                    jugadoresGameObject.Add(nuevoPlayer);
+                }
+
+                if (!jugadorRealCreado)
+                {
+                    jugadoresGameObject[int.Parse(idPlayer)].name = "JugadorReal";
+                    GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = jugadoresGameObject[int.Parse(idPlayer)];
+                    jugadorRealCreado = true;
                 }
 
                 break;
+
+            case Commands.MOVER_JUGADOR:
+                MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
+
+                int idJug = int.Parse(moverRecMsg.jugador.id);
+                if (int.Parse(idPlayer) != idJug)
+                {
+                    jugadoresGameObject[idJug].transform.position = moverRecMsg.jugador.posJugador;
+                    jugadoresGameObject[idJug].transform.rotation = moverRecMsg.jugador.rotacion;
+                }
+
+                break;
+
 
             default:
                 Debug.Log("Mensaje desconocido");
                 break;
         }
+    }
+
+    public void movimiento(Vector3 pos, Quaternion rotacion)
+    {
+        MoverMsg moverMsg = new MoverMsg();
+        moverMsg.jugador.id = idPlayer;
+        moverMsg.jugador.posJugador = pos;
+        moverMsg.jugador.rotacion = rotacion;
+
+        SendToServer(JsonUtility.ToJson(moverMsg));
     }
 
     private void OnDisconnect()

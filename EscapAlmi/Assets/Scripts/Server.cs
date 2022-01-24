@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 using Unity.Collections;
 using System.Text;
 using Unity.Networking.Transport;
-using NetworkMessages;
+using NetworkObject.NetworkMessages;
 using NetworkObject;
 using System;
 using UnityEngine.UI;
@@ -16,7 +16,7 @@ public class Server : MonoBehaviour
     public ushort serverPort;
     public NativeList<NetworkConnection> m_connections;
     public List<GameObject> jugadoresSimulados;
-    public List<NetworkObject.NetworkPlayer> jugadores;
+    public List<NetworkObject.NetworkObject.Jugador> jugadores;
     public GameObject prefabJugador;
 
     private string idPlayerServer;
@@ -36,7 +36,7 @@ public class Server : MonoBehaviour
             m_Driver.Listen();
         }
         m_connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
-        jugadores = new List<NetworkObject.NetworkPlayer>();
+        jugadores = new List<NetworkObject.NetworkObject.Jugador>();
 
         GameObject nuevoPlayer = Instantiate(prefabJugador);
         nuevoPlayer.name = "JugadorReal";
@@ -44,8 +44,9 @@ public class Server : MonoBehaviour
 
 
         jugadoresSimulados.Add(nuevoPlayer);
-        NetworkObject.NetworkPlayer nuevoJugador = new NetworkObject.NetworkPlayer();
-        idPlayerServer = nuevoJugador.id;
+        NetworkObject.NetworkObject.Jugador nuevoJugador = new NetworkObject.NetworkObject.Jugador();
+        nuevoJugador.id = "0";
+        idPlayerServer = "0";
         
         jugadores.Add(nuevoJugador);
     }
@@ -102,7 +103,7 @@ public class Server : MonoBehaviour
         Debug.Log("Numero de Jugadores es: " + m_connections.Length);
 
         HandshakeMsg m = new HandshakeMsg();
-        m.player.id = c.InternalId.ToString();
+        m.player.id = jugadores.Count + "";
         SendToClient(JsonUtility.ToJson(m), c);
     }
 
@@ -130,14 +131,15 @@ public class Server : MonoBehaviour
                 HandshakeMsg mensajeRecibido = JsonUtility.FromJson<HandshakeMsg>(recMsg);
                 //Escribo en un log la persona que se ha conectado
                 Debug.Log("Se ha conectado un nuevo usuario");
-                NetworkObject.NetworkPlayer nuevoJugador = new NetworkObject.NetworkPlayer();
+                NetworkObject.NetworkObject.Jugador nuevoJugador = new NetworkObject.NetworkObject.Jugador();
 
-                nuevoJugador.id = mensajeRecibido.player.id;
+                nuevoJugador.id = jugadores.Count + "";
                 GameObject nuevoPlayer = Instantiate(prefabJugador);
                 jugadoresSimulados.Add(nuevoPlayer);
                 jugadores.Add(nuevoJugador);
 
                 ReadyMsg readyMsg = new ReadyMsg();
+                readyMsg.playerList = jugadores;
                 readyMsg.indexMap = ElegirMapa.indexMapa;
                 int numJugadores = jugadores.Count;
                 for (int i = 0; i < numJugadores; i++)
@@ -147,9 +149,51 @@ public class Server : MonoBehaviour
 
                 break;
 
+            case Commands.MOVER_JUGADOR:
+                MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
+
+                int idJug = int.Parse(moverRecMsg.jugador.id);
+                jugadores[idJug].posJugador = moverRecMsg.jugador.posJugador;
+                jugadoresSimulados[idJug].transform.position = moverRecMsg.jugador.posJugador;
+                jugadores[idJug].rotacion = moverRecMsg.jugador.rotacion;
+                jugadoresSimulados[idJug].transform.rotation = moverRecMsg.jugador.rotacion;
+
+                MoverMsg moverMsg = new MoverMsg();
+                moverMsg.jugador.id = moverRecMsg.jugador.id;
+                moverMsg.jugador.posJugador = moverRecMsg.jugador.posJugador;
+                moverMsg.jugador.rotacion = moverRecMsg.jugador.rotacion;
+
+                int numJug = jugadores.Count;
+                for (int i = 0; i < numJug - 1; i++)
+                {
+                    SendToClient(JsonUtility.ToJson(moverMsg), m_connections[i]);
+                }
+
+                break;
+
             default:
                 Debug.Log("Mensaje desconocido");
                 break;
+        }
+    }
+
+    public void movimiento(Vector3 pos, Quaternion rotacion)
+    {
+        if (jugadores.Count > 1)
+        {
+            jugadores[int.Parse(idPlayerServer)].posJugador = pos;
+            jugadores[int.Parse(idPlayerServer)].rotacion = rotacion;
+
+            MoverMsg moverMsg = new MoverMsg();
+            moverMsg.jugador.id = idPlayerServer;
+            moverMsg.jugador.posJugador = pos;
+            moverMsg.jugador.rotacion = rotacion;
+
+            int numJug = jugadores.Count;
+            for (int i = 0; i < numJug - 1; i++)
+            {
+                SendToClient(JsonUtility.ToJson(moverMsg), m_connections[i]);
+            }
         }
     }
 

@@ -53,10 +53,10 @@
     <UnityVersion>2020.3.26f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\BurstILPostProcessor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\ILPostProcessing.cs" />
     <Compile Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\FunctionPointerInvokeTransform.cs" />
+    <Compile Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\BurstILPostProcessor.cs" />
     <Compile Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\AssemblyLoader.cs" />
+    <Compile Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\ILPostProcessing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\PackageCache\com.unity.burst@1.5.5\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll" />
