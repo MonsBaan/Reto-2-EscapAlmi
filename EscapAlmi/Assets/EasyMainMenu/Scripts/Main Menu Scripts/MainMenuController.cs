@@ -84,6 +84,7 @@ public class MainMenuController : MonoBehaviour {
         OpcionesAjustesGraficos.SetActive(false);
         JugarMenuConectarse.SetActive(false);
         JugarMenuSalaEspera.SetActive(true);
+        esServer = true;
 
         JugarMenuSalaEspera.GetComponent<ScriptSalaEsperaCliente>().enabled = false;
         JugarMenuSalaEspera.GetComponent<ServerSalaEspera>().enabled = true;
@@ -97,12 +98,22 @@ public class MainMenuController : MonoBehaviour {
 
     public void openSalaEsperaUnirse()
     {
+
+        string ip = GameObject.Find("UnirseJuego").transform.GetChild(1).GetChild(2).GetComponent<Text>().text;
+        if (ip.Equals(""))
+        {
+            ip = "127.0.0.1";
+        }
+        ScriptSalaEsperaCliente.serverIp = ip;
+
         //enable respective panel
         OpcionesAjustesGame.SetActive(false);
         OpcionesAjustesControles.SetActive(false);
         OpcionesAjustesGraficos.SetActive(false);
         JugarMenuConectarse.SetActive(false);
         JugarMenuSalaEspera.SetActive(true);
+        esServer = false;
+
 
         JugarMenuSalaEspera.GetComponent<ScriptSalaEsperaCliente>().enabled = true;
         JugarMenuSalaEspera.GetComponent<ServerSalaEspera>().enabled = false;

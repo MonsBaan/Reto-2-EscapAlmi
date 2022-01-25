@@ -54,14 +54,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\EasyMainMenu\Scripts\Main Menu Scripts\MainMenuController.cs" />
+    <Compile Include="Assets\Scripts\ServerSalaEspera.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\JsonHelper.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\RollerBall.cs" />
+    <Compile Include="Assets\Scripts\NetworkClient.cs" />
     <Compile Include="Assets\Scripts\ScriptSalaEspera.cs" />
     <Compile Include="Assets\Scripts\ElegirMapa.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\ResponseHelper.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\EnumerableExt.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\Promise_NonGeneric.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\ExecuteOnMainThread.cs" />
+    <Compile Include="Assets\Scripts\ScriptTexto.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\BasicMazeGenerator.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\DivisionMazeGenerator.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\TreeMazeGenerator.cs" />
@@ -72,11 +75,13 @@
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\PromiseHelpers.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\RequestException.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\Exceptions\PromiseStateException.cs" />
+    <Compile Include="Assets\Scripts\ScriptItem.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\RSG.Promise\Promise.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\MazeSpawner.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\Common.cs" />
     <Compile Include="Assets\Scripts\ScriptLuz.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\RandomTreeMazeGenerator.cs" />
+    <Compile Include="Assets\Scripts\Server.cs" />
     <Compile Include="Assets\Scripts\ScriptSalaEsperaCliente.cs" />
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\RequestHelper.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />
@@ -92,9 +97,6 @@
     <Compile Include="Assets\Modulos\RestClient\Packages\Proyecto26.RestClient\Helpers\Extensions.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\OldestTreeMazeGenerator.cs" />
     <Compile Include="Assets\Modulos\MazeGenerator\Scripts\RecursiveTreeMazeGenerator.cs" />
-    <Compile Include="Assets\Scripts\ServerSalaEspera.cs" />
-    <Compile Include="Assets\Scripts\Server.cs" />
-    <Compile Include="Assets\Scripts\NetworkClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

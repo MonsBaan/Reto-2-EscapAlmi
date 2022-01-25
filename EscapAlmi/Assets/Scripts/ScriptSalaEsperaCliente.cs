@@ -6,12 +6,13 @@ using Unity.Collections;
 using System.Text;
 using Unity.Networking.Transport;
 using NetworkObject.NetworkMessages;
+using UnityEngine.SceneManagement;
 
 public class ScriptSalaEsperaCliente : MonoBehaviour
 {
     public NetworkDriver m_Driver;
     public NetworkConnection m_Connection;
-    public string serverIp;
+    public static string serverIp;
     public ushort serverPort;
     private GameObject server;
     public bool conectado;
@@ -25,6 +26,8 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(serverIp);
+
         btnEmpezar.SetActive(false);
 
         m_Driver = NetworkDriver.Create();
@@ -89,6 +92,11 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
             case Commands.MANTENER_CONEXION_SALAESPERA:
                 MantenerConexionSalaEspera mantenerConexion = JsonUtility.FromJson<MantenerConexionSalaEspera>(recMsg);
                 listaJugadores = mantenerConexion.listaJugadores;
+                break;
+            case Commands.CAMBIO_ESCENA:
+                CambiarEscena cambiarEscena = JsonUtility.FromJson<CambiarEscena>(recMsg);
+                SceneManager.LoadScene("InGame");
+
                 break;
             default:
                 Debug.Log("Mensaje desconocido");

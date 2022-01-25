@@ -9,6 +9,7 @@ using System.Text;
 using System;
 using Random = UnityEngine.Random;
 using NetworkObject.NetworkMessages;
+using UnityEngine.SceneManagement;
 
 public class ServerSalaEspera : MonoBehaviour
 {
@@ -177,8 +178,13 @@ public class ServerSalaEspera : MonoBehaviour
             }
         }
 
-
-
     }
+    public void empezarJuego()
+    {
+        SceneManager.LoadScene("InGame");
 
+        CambiarEscena cambiarEscena = new CambiarEscena();
+        foreach (var jugador in m_connections)
+            SendToClient(JsonUtility.ToJson(cambiarEscena), jugador);
+    }
 }

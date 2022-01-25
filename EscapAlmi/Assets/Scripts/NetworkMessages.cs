@@ -30,7 +30,7 @@ namespace NetworkObject
     {
         public enum Commands
         {
-            HANDSHAKE, HANDSHAKE_SALAESPERA, MANTENER_CONEXION_SALAESPERA, CONEXION, READY, MOVER_JUGADOR
+            HANDSHAKE, HANDSHAKE_SALAESPERA, MANTENER_CONEXION_SALAESPERA, CONEXION, READY, MOVER_JUGADOR, CAMBIO_ESCENA
         }
 
         [System.Serializable]
@@ -66,7 +66,7 @@ namespace NetworkObject
             public MantenerConexionSalaEspera()
             {
                 command = Commands.MANTENER_CONEXION_SALAESPERA;
-                
+
             }
         }
         [System.Serializable]
@@ -89,6 +89,16 @@ namespace NetworkObject
             {
                 command = Commands.MOVER_JUGADOR;
                 jugador = new NetworkObject.Jugador();
+            }
+        }
+
+        [System.Serializable]
+        public class CambiarEscena : NetworkHeader
+        {
+            public NetworkObject.Jugador jugador;
+            public CambiarEscena()
+            {
+                command = Commands.CAMBIO_ESCENA;
             }
         }
     }

@@ -474,10 +474,12 @@ m_PackageAssets:
         - 1.1.29
         - 1.1.30
         - 2.0.1-pre.12
+        - 2.0.1-pre.18
         compatible:
         - 1.1.29
         - 1.1.30
         - 2.0.1-pre.12
+        - 2.0.1-pre.18
         verified: 1.1.30
       dependencies:
       - name: com.unity.ext.nunit
@@ -879,6 +881,7 @@ m_PackageAssets:
         - 1.0.0-pre.8
         - 1.0.0-pre.9
         - 1.0.0-pre.10
+        - 1.0.0-pre.12
         compatible:
         - 0.2.0-preview.4
         - 0.2.1-preview.1
@@ -901,6 +904,7 @@ m_PackageAssets:
         - 1.0.0-pre.8
         - 1.0.0-pre.9
         - 1.0.0-pre.10
+        - 1.0.0-pre.12
         verified: 
       dependencies:
       - name: com.unity.collections

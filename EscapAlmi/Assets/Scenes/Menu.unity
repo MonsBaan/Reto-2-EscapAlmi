@@ -5405,7 +5405,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768965481}
   m_LocalRotation: {x: -0, y: 0.00000031292436, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 460.99985}
+  m_LocalPosition: {x: 0, y: 0, z: 460.9998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1729549522}
@@ -5490,9 +5490,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: Quit
+      - m_Target: {fileID: 1580942167}
+        m_TargetAssemblyTypeName: ServerSalaEspera, Assembly-CSharp
+        m_MethodName: empezarJuego
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11851,7 +11851,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 103116ff1533e5144b68ff254d0f59db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverIp: 127.0.0.1
   serverPort: 5000
   conectado: 0
   btnEmpezar: {fileID: 768965481}

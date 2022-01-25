@@ -18,8 +18,12 @@ public class Server : MonoBehaviour
     public List<GameObject> jugadoresSimulados;
     public List<NetworkObject.NetworkObject.Jugador> jugadores;
     public GameObject prefabJugador;
+    public GameObject prefabNombreJugador;
 
     private string idPlayerServer;
+    private GameObject playerReal;
+    private GameObject nombreJReal;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,12 +42,19 @@ public class Server : MonoBehaviour
         m_connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
         jugadores = new List<NetworkObject.NetworkObject.Jugador>();
 
-        GameObject nuevoPlayer = Instantiate(prefabJugador);
-        nuevoPlayer.name = "JugadorReal";
-        GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = nuevoPlayer;
+        playerReal = Instantiate(prefabJugador);
+        playerReal.name = "JugadorReal";
 
 
-        jugadoresSimulados.Add(nuevoPlayer);
+        nombreJReal = Instantiate(prefabNombreJugador);
+        nombreJReal.GetComponent<ScriptTexto>().jugador = playerReal;
+
+
+
+        GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = playerReal;
+
+
+        jugadoresSimulados.Add(playerReal);
         NetworkObject.NetworkObject.Jugador nuevoJugador = new NetworkObject.NetworkObject.Jugador();
         nuevoJugador.id = "0";
         idPlayerServer = "0";

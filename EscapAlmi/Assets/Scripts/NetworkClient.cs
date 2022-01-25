@@ -31,7 +31,7 @@ public class NetworkClient : MonoBehaviour
     {
         m_Driver = NetworkDriver.Create();
         m_Connection = default(NetworkConnection);
-        var endpoint = NetworkEndPoint.Parse(MainMenuController.ipServer, serverPort);
+        var endpoint = NetworkEndPoint.Parse(ScriptSalaEsperaCliente.serverIp, serverPort);
         m_Connection = m_Driver.Connect(endpoint);
     }
 

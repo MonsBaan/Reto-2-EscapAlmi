@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     public GameObject camara, jugadorREAL;
-
+    public int camaraDistancia;
     private Transform camaraTransform;
     void Start()
     {
@@ -16,7 +16,7 @@ public class CameraScript : MonoBehaviour
     void Update()
     {
         Vector3 posJugador = jugadorREAL.transform.position;
-        posJugador.y = posJugador.y + 20;
+        posJugador.y = posJugador.y + camaraDistancia;
         camaraTransform.position = posJugador;
     }
 }
