@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MovimientoJugador : MonoBehaviour
 {
     // Start is called before the first frame update
+    public int idJugadorControl;
     private Transform miTransform;
     public int velocidad;
     public float aceleracion;
@@ -23,9 +24,6 @@ public class MovimientoJugador : MonoBehaviour
         {
             movimientoPersonaje();
 
-        }
-        if (this.gameObject.name == "JugadorReal")
-        {
             if (MainMenuController.esServer)
             {
                 GameObject.Find("Server").GetComponent<Server>().movimiento(this.gameObject.transform.position, this.gameObject.transform.rotation);
@@ -51,8 +49,6 @@ public class MovimientoJugador : MonoBehaviour
         float move = Input.GetAxis("Vertical");
 
         myRigidbody.velocity = Vector3.Lerp(myRigidbody.velocity, velocidad * transform.forward * Input.GetAxis("Vertical"), aceleracion * Time.deltaTime);
-
-        
 
         if (Input.GetKey(KeyCode.A))
         {

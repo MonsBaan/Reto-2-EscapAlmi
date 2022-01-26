@@ -741,9 +741,17 @@
       <Project>{CDAABC54-D616-9C22-D447-A4EC2671CBE0}</Project>
       <Name>Unity.Rider.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="IngameDebugConsole.Editor.csproj">
+      <Project>{DDB4FF39-4F70-0BDA-53C8-D875A789A808}</Project>
+      <Name>IngameDebugConsole.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{0560921D-0A1A-6F5E-32F8-241DE50EAE0C}</Project>
       <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="IngameDebugConsole.Runtime.csproj">
+      <Project>{36821C3D-F749-586F-4C8F-440879588A05}</Project>
+      <Name>IngameDebugConsole.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
       <Project>{3688DDF9-0E28-7D1C-1CD7-3CA57CDD78B8}</Project>

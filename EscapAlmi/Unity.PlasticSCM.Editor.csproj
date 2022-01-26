@@ -165,8 +165,8 @@
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\Views\DownloadPlasticExeWindow.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\Views\Diff\MergeCategoryTreeViewItem.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\UI\GUIActionRunner.cs" />
-    <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\UI\UnityPlasticGuiMessage.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\WebApi\WebRestApiClient.cs" />
+    <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\UI\UnityPlasticGuiMessage.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\UI\BoolSetting.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\Views\PendingChanges\Dialogs\LaunchCheckinConflictsDialog.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.15.9\Editor\PlasticSCM\AssetMenu\Dialogs\CheckinDialog.cs" />

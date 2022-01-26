@@ -8,7 +8,8 @@ public class ScriptSalaEspera : MonoBehaviour
     public GameObject prefabListaObj;
     public GameObject contentScroll;
     // Start is called before the first frame update
-    private int numJugadores = 0;
+    public static int numJugadores = 0;
+
     void Start()
     {
     }

@@ -23,6 +23,8 @@ public class ServerSalaEspera : MonoBehaviour
     public GameObject btnEmpezar;
     public List<NetworkObject.NetworkObject.Jugador> listaJugadores;
 
+    public static int numJugadores;
+
 
     void Start()
     {
@@ -181,10 +183,16 @@ public class ServerSalaEspera : MonoBehaviour
     }
     public void empezarJuego()
     {
+
+        numJugadores = m_connections.Length;
         SceneManager.LoadScene("InGame");
 
         CambiarEscena cambiarEscena = new CambiarEscena();
-        foreach (var jugador in m_connections)
-            SendToClient(JsonUtility.ToJson(cambiarEscena), jugador);
+        for (int i = 0; i < m_connections.Length; i++)
+        {
+            SendToClient(JsonUtility.ToJson(cambiarEscena), m_connections[i]);
+        }
+
+
     }
 }

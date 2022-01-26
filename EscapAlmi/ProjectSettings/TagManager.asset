@@ -7,6 +7,11 @@ TagManager:
   - Floor
   - Coin
   - NombreLista
+  - Mapa
+  - Lupa
+  - Botas
+  - RevientaMuros
+  - Arena
   layers:
   - Default
   - TransparentFX

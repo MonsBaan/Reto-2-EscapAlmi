@@ -20,14 +20,19 @@ public class Server : MonoBehaviour
     public GameObject prefabJugador;
     public GameObject prefabNombreJugador;
 
-    private string idPlayerServer;
-    private GameObject playerReal;
+    public GameObject playerReal;
     private GameObject nombreJReal;
-
 
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(ServerSalaEspera.numJugadores);
+        
+        for (int i = 0; i < ServerSalaEspera.numJugadores; i++)
+        {
+            jugadoresSimulados.Add(Instantiate(prefabJugador));
+        }
+
         m_Driver = NetworkDriver.Create();
         var endpoint = NetworkEndPoint.AnyIpv4;
         endpoint.Port = serverPort;
@@ -42,24 +47,11 @@ public class Server : MonoBehaviour
         m_connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
         jugadores = new List<NetworkObject.NetworkObject.Jugador>();
 
-        playerReal = Instantiate(prefabJugador);
-        playerReal.name = "JugadorReal";
-
 
         nombreJReal = Instantiate(prefabNombreJugador);
         nombreJReal.GetComponent<ScriptTexto>().jugador = playerReal;
-
-
-
         GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = playerReal;
 
-
-        jugadoresSimulados.Add(playerReal);
-        NetworkObject.NetworkObject.Jugador nuevoJugador = new NetworkObject.NetworkObject.Jugador();
-        nuevoJugador.id = "0";
-        idPlayerServer = "0";
-        
-        jugadores.Add(nuevoJugador);
     }
 
     // Update is called once per frame
@@ -111,10 +103,9 @@ public class Server : MonoBehaviour
     {
         m_connections.Add(c);
         Debug.Log("Accepted connection");
-        Debug.Log("Numero de Jugadores es: " + m_connections.Length);
 
         HandshakeMsg m = new HandshakeMsg();
-        m.player.id = jugadores.Count + "";
+        m.player.id = m_connections.Length + "";
         SendToClient(JsonUtility.ToJson(m), c);
     }
 
@@ -140,45 +131,32 @@ public class Server : MonoBehaviour
         {
             case Commands.HANDSHAKE:
                 HandshakeMsg mensajeRecibido = JsonUtility.FromJson<HandshakeMsg>(recMsg);
-                //Escribo en un log la persona que se ha conectado
-                Debug.Log("Se ha conectado un nuevo usuario");
                 NetworkObject.NetworkObject.Jugador nuevoJugador = new NetworkObject.NetworkObject.Jugador();
 
                 nuevoJugador.id = jugadores.Count + "";
+                /*
                 GameObject nuevoPlayer = Instantiate(prefabJugador);
                 jugadoresSimulados.Add(nuevoPlayer);
                 jugadores.Add(nuevoJugador);
 
-                ReadyMsg readyMsg = new ReadyMsg();
-                readyMsg.playerList = jugadores;
-                readyMsg.indexMap = ElegirMapa.indexMapa;
-                int numJugadores = jugadores.Count;
-                for (int i = 0; i < numJugadores; i++)
+                if (jugadores.Count == ScriptSalaEspera.numJugadores)
                 {
-                    SendToClient(JsonUtility.ToJson(readyMsg), m_connections[i]);
-                }
+                    ReadyMsg readyMsg = new ReadyMsg();
+                    readyMsg.playerList = jugadores;
+                    readyMsg.indexMap = ElegirMapa.indexMapa;
+
+                    int numJugadores = jugadores.Count;
+                    for (int i = 0; i < numJugadores - 1; i++)
+                    {
+                        SendToClient(JsonUtility.ToJson(readyMsg), m_connections[i]);
+                    }
+                }*/
 
                 break;
 
             case Commands.MOVER_JUGADOR:
                 MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
 
-                int idJug = int.Parse(moverRecMsg.jugador.id);
-                jugadores[idJug].posJugador = moverRecMsg.jugador.posJugador;
-                jugadoresSimulados[idJug].transform.position = moverRecMsg.jugador.posJugador;
-                jugadores[idJug].rotacion = moverRecMsg.jugador.rotacion;
-                jugadoresSimulados[idJug].transform.rotation = moverRecMsg.jugador.rotacion;
-
-                MoverMsg moverMsg = new MoverMsg();
-                moverMsg.jugador.id = moverRecMsg.jugador.id;
-                moverMsg.jugador.posJugador = moverRecMsg.jugador.posJugador;
-                moverMsg.jugador.rotacion = moverRecMsg.jugador.rotacion;
-
-                int numJug = jugadores.Count;
-                for (int i = 0; i < numJug - 1; i++)
-                {
-                    SendToClient(JsonUtility.ToJson(moverMsg), m_connections[i]);
-                }
 
                 break;
 
@@ -192,11 +170,8 @@ public class Server : MonoBehaviour
     {
         if (jugadores.Count > 1)
         {
-            jugadores[int.Parse(idPlayerServer)].posJugador = pos;
-            jugadores[int.Parse(idPlayerServer)].rotacion = rotacion;
-
             MoverMsg moverMsg = new MoverMsg();
-            moverMsg.jugador.id = idPlayerServer;
+            moverMsg.jugador.id = 0+"";
             moverMsg.jugador.posJugador = pos;
             moverMsg.jugador.rotacion = rotacion;
 

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SimpleSelectedItems:
-    m_Keys: []
-    m_Values: 
-  RevisionSummary: 
+    m_Keys:
+    - 
+    m_Values: 01
+  RevisionSummary: Mapas y cosas
   ChangesSearchValue: 
   SelectedHistoryRevision: 
   HistoryPageNumber: 0

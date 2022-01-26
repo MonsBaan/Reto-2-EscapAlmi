@@ -96,6 +96,7 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
             case Commands.CAMBIO_ESCENA:
                 CambiarEscena cambiarEscena = JsonUtility.FromJson<CambiarEscena>(recMsg);
                 SceneManager.LoadScene("InGame");
+                OnDisconnect();
 
                 break;
             default:

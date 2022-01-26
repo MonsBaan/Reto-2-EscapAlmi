@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4528862106282889593}
   m_Layer: 0
   m_Name: RevientaMuros
-  m_TagString: Untagged
+  m_TagString: RevientaMuros
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

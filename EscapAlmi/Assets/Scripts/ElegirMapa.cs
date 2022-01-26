@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ElegirMapa : MonoBehaviour
@@ -8,7 +9,6 @@ public class ElegirMapa : MonoBehaviour
     public GameObject cliente;
     public GameObject[] arrayMapas;
     public static int indexMapa;
-
     // Start is called before the first frame update
     void Start()
     {

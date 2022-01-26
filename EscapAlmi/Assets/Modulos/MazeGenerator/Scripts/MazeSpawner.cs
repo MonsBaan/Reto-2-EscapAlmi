@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //<summary>
 //Game object, that creates maze and instantiates it in scene
@@ -24,7 +25,11 @@ public class MazeSpawner : MonoBehaviour {
 	public float CellWidth = 5;
 	public float CellHeight = 5;
 	public bool AddGaps = true;
-	public GameObject[] GoalPrefab = null;
+	public GameObject[] PowerUps= null;
+	public GameObject[] Coins= null;
+
+	public List<GameObject> poolItems;
+	public List<GameObject> poolCoins;
 
 	private BasicMazeGenerator mMazeGenerator = null;
 
@@ -74,11 +79,18 @@ public class MazeSpawner : MonoBehaviour {
 					tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					tmp.transform.parent = transform;
 				}
-				if(cell.IsGoal && GoalPrefab != null){
+				if(cell.IsGoal && PowerUps != null){
 					int numRandom = Random.Range(0, 4);
-					
-					tmp = Instantiate(GoalPrefab[numRandom],new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
-					tmp.transform.parent = transform;
+
+					GameObject item = Instantiate(PowerUps[numRandom], new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
+					poolItems.Add(item);
+					item.transform.parent = transform;
+                }
+                else
+                {
+					GameObject moneda = Instantiate(Coins[0], new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
+					poolCoins.Add(moneda);
+					moneda.transform.parent = transform;
 				}
 			}
 		}

@@ -5,6 +5,7 @@
 -a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PlayerScriptAssemblies\Unity.TextMeshPro.dll"
 -a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PlayerScriptAssemblies\Unity.Collections.dll"
 -a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PlayerScriptAssemblies\UnityEngine.UI.dll"
+-a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PlayerScriptAssemblies\IngameDebugConsole.Runtime.dll"
 -a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PlayerScriptAssemblies\Unity.Networking.Transport.dll"
 -a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PlayerScriptAssemblies\Unity.Mathematics.dll"
 -a="C:\Users\almi\Documents\Reto-2-EscapAlmi\EscapAlmi\Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\AOT\Newtonsoft.Json.dll"

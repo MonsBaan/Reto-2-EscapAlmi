@@ -20,7 +20,6 @@ public class NetworkClient : MonoBehaviour
     public GameObject prefabJugador;
 
     private string idPlayer;
-    private bool jugadorRealCreado = false;
 
     void Start()
     {
@@ -104,20 +103,17 @@ public class NetworkClient : MonoBehaviour
 
                 GameObject.Find("Mapas").GetComponent<ElegirMapa>().cargarMapa(readyMsg.indexMap);
 
-                int indexJug = jugadoresGameObject.Count;
-                for (int i = 0; i < (readyMsg.playerList.Count - indexJug); i++)
+                int numJugadores = readyMsg.playerList.Count;
+                
+                for (int i = 0; i < numJugadores; i++)
                 {
                     GameObject nuevoPlayer = Instantiate(prefabJugador);
-                    nuevoPlayer.transform.position = new Vector3(readyMsg.playerList[indexJug + i].posJugador.x, 2, readyMsg.playerList[indexJug + i].posJugador.z);
                     jugadoresGameObject.Add(nuevoPlayer);
+                    nuevoPlayer.transform.position = new Vector3(readyMsg.playerList[i].posJugador.x, 2, readyMsg.playerList[i].posJugador.z);
                 }
-
-                if (!jugadorRealCreado)
-                {
-                    jugadoresGameObject[int.Parse(idPlayer)].name = "JugadorReal";
-                    GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = jugadoresGameObject[int.Parse(idPlayer)];
-                    jugadorRealCreado = true;
-                }
+                Debug.Log("id cliente " + idPlayer);
+                jugadoresGameObject[int.Parse(idPlayer)].name = "JugadorReal";
+                GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = jugadoresGameObject[int.Parse(idPlayer)];
 
                 break;
 
