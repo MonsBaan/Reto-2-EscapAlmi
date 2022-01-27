@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScriptItem : MonoBehaviour
 {
@@ -28,5 +29,48 @@ public class ScriptItem : MonoBehaviour
         miTransform.Translate(direccion * velocidadFlotar * Time.deltaTime);
         miTransform.RotateAround(Vector3.up, velocidadRotacion);
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.Equals("Player"))
+        {
+            if (this.gameObject.tag.Equals("Coin"))
+            {
+                GameObject.Find("Monedas").GetComponent<Text>().text = int.Parse(GameObject.Find("Monedas").GetComponent<Text>().text) + 31 + "";
+            }
+
+            if (this.gameObject.tag.Equals("Arena"))
+            {
+                string cantidad = GameObject.Find("Item1").transform.GetChild(0).gameObject.GetComponent<Text>().text;
+                GameObject.Find("Item1").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+            }
+            if (this.gameObject.tag.Equals("Botas"))
+            {
+                string cantidad = GameObject.Find("Item2").transform.GetChild(0).gameObject.GetComponent<Text>().text;
+                GameObject.Find("Item2").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+            }
+            if (this.gameObject.tag.Equals("Lupa"))
+            {
+                string cantidad = GameObject.Find("Item3").transform.GetChild(0).gameObject.GetComponent<Text>().text;
+                GameObject.Find("Item3").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+            }
+            if (this.gameObject.tag.Equals("RevientaMuros"))
+            {
+                string cantidad = GameObject.Find("Item4").transform.GetChild(0).gameObject.GetComponent<Text>().text;
+                GameObject.Find("Item4").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+            }
+
+            if (MainMenuController.esServer)
+            {
+                //GameObject.Find("Server").GetComponent<Server>().coin(GameObject.Find("Mapas").GetComponent<ElegirMapa>().indexMoneda(this.gameObject));
+            }
+            else
+            {
+                //GameObject.Find("Cliente").GetComponent<NetworkClient>()
+            }
+
+            this.gameObject.SetActive(false);
+        }
     }
 }

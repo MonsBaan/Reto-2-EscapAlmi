@@ -80,11 +80,6 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
 
         switch (header.command)
         {
-            case Commands.CONEXION:
-                /*ConexionMsg mensajeRecibido = JsonUtility.FromJson<ConexionMsg>(recMsg);
-                idPlayer = mensajeRecibido.player.id;
-                Debug.Log("ID de Jugador: " + idPlayer);*/
-                break;
             case Commands.HANDSHAKE_SALAESPERA:
                 HandshakeSalaEspera handshake = JsonUtility.FromJson<HandshakeSalaEspera>(recMsg);
                 idJugador = int.Parse(handshake.player.id);

@@ -12,6 +12,7 @@ TagManager:
   - Botas
   - RevientaMuros
   - Arena
+  - Muro
   layers:
   - Default
   - TransparentFX

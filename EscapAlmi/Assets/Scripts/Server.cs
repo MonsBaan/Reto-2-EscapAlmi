@@ -15,23 +15,39 @@ public class Server : MonoBehaviour
     public NetworkDriver m_Driver;
     public ushort serverPort;
     public NativeList<NetworkConnection> m_connections;
-    public List<GameObject> jugadoresSimulados;
+
+    [Header("LISTA DE JUGADORES")]
     public List<NetworkObject.NetworkObject.Jugador> jugadores;
+    [Header("LISTA DE JUGADORES READY")]
+    public List<int> jugadoresReady;
+    [Header("LISTA DE PERSONAJES")]
+    public List<GameObject> jugadoresSimulados;
+
+    [Header("MODELO DE JUGADOR")]
     public GameObject prefabJugador;
     public GameObject prefabNombreJugador;
 
-    public GameObject playerReal;
-    private GameObject nombreJReal;
 
-    // Start is called before the first frame update
+    [Header("PERSONAJE QUE SE ESTA CONTROLANDO")]
+    public GameObject myPlayer;
+
+    private bool jugando = false;
+
     void Start()
     {
-        Debug.Log(ServerSalaEspera.numJugadores);
-        
-        for (int i = 0; i < ServerSalaEspera.numJugadores; i++)
+        //CREACION DE TANTOS PERSONAJES COMO JUGADORES HABIA EN LA SALA DE ESPERA
+        for (int i = 0; i < ServerSalaEspera.numJugadores + 1; i++)
         {
-            jugadoresSimulados.Add(Instantiate(prefabJugador));
+            GameObject jugadorSimulado = Instantiate(prefabJugador);
+            jugadorSimulado.GetComponent<JugadorSimuladoScript>().enabled = true;
+
+            jugadoresSimulados.Add(jugadorSimulado);
         }
+        //LE ASIGNO EL PRIMER JUGADOR AL SERVIDOR
+        myPlayer = jugadoresSimulados[0];
+        myPlayer.GetComponent<MovimientoJugador>().enabled = true;
+        myPlayer.GetComponent<JugadorSimuladoScript>().enabled = false;
+
 
         m_Driver = NetworkDriver.Create();
         var endpoint = NetworkEndPoint.AnyIpv4;
@@ -46,16 +62,36 @@ public class Server : MonoBehaviour
         }
         m_connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
         jugadores = new List<NetworkObject.NetworkObject.Jugador>();
+        jugadoresReady = new List<int>();
+        jugadoresReady.Add(0);
 
-
-        nombreJReal = Instantiate(prefabNombreJugador);
-        nombreJReal.GetComponent<ScriptTexto>().jugador = playerReal;
-        GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = playerReal;
 
     }
 
     // Update is called once per frame
     void Update()
+    {
+        connectionStuff();
+        mantenerConexion();
+
+        if (jugadores.Count == ServerSalaEspera.numJugadores && !jugando)
+        {
+            ReadyMsg readyMsg = new ReadyMsg();
+            readyMsg.playerList = jugadores;
+            readyMsg.indexMap = ElegirMapa.indexMapa;
+            readyMsg.numJugadores = m_connections.Length;
+
+            Debug.Log("Jugadores: " + jugadores.Count + " | Conexiones: " + m_connections.Length);
+
+            for (int i = 0; i < m_connections.Length; i++)
+            {
+                SendToClient(JsonUtility.ToJson(readyMsg), m_connections[i]);
+            }
+            jugando = true;
+        }
+    }
+    #region ConnectionStuff
+    void connectionStuff()
     {
         m_Driver.ScheduleUpdate().Complete();
 
@@ -98,28 +134,36 @@ public class Server : MonoBehaviour
             }
         }
     }
-
     void OnConnect(NetworkConnection c)
     {
         m_connections.Add(c);
         Debug.Log("Accepted connection");
 
         HandshakeMsg m = new HandshakeMsg();
-        m.player.id = m_connections.Length + "";
+        m.player.id = m_connections.Length + ""; //EL ID ES LA POSICION DEL ARRAY "JugadoresSimulados"
+        m.numJugadores = ServerSalaEspera.numJugadores + 1; //SE LE AÑADE AQUI EL USUARIO EXTRA QUE ES EL SERVIDOR
+        jugadores.Add(m.player);
+
         SendToClient(JsonUtility.ToJson(m), c);
     }
 
-    private void SendToClient(string message, NetworkConnection c)
+    void mantenerConexion()
     {
-        //var writer = m_Driver.BeginSend(NetworkPipeline.Null, c);
-        DataStreamWriter writer;
-        m_Driver.BeginSend(NetworkPipeline.Null, c, out writer);
-        NativeArray<byte> bytes = new
-            NativeArray<byte>(Encoding.ASCII.GetBytes(message), Allocator.Temp);
-        writer.WriteBytes(bytes);
-        m_Driver.EndSend(writer);
+        MantenerConexion mantenerConexion = new MantenerConexion();
+        mantenerConexion.jugadoresReady = jugadoresReady;
+        foreach (var jugador in mantenerConexion.jugadoresReady)
+        {
+            jugadoresSimulados[jugador].SetActive(true);
+        }
+        for (int i = 0; i < m_connections.Length; i++)
+        {
+            SendToClient(JsonUtility.ToJson(mantenerConexion), m_connections[i]);
+        }
     }
+    #endregion
 
+
+    #region Recibo de Datos
     private void OnData(DataStreamReader stream, int numJugador)
     {
         NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
@@ -129,36 +173,34 @@ public class Server : MonoBehaviour
 
         switch (header.command)
         {
-            case Commands.HANDSHAKE:
-                HandshakeMsg mensajeRecibido = JsonUtility.FromJson<HandshakeMsg>(recMsg);
-                NetworkObject.NetworkObject.Jugador nuevoJugador = new NetworkObject.NetworkObject.Jugador();
+            case Commands.READY:
+                ReadyMsg readyMsg = JsonUtility.FromJson<ReadyMsg>(recMsg);
 
-                nuevoJugador.id = jugadores.Count + "";
-                /*
-                GameObject nuevoPlayer = Instantiate(prefabJugador);
-                jugadoresSimulados.Add(nuevoPlayer);
-                jugadores.Add(nuevoJugador);
-
-                if (jugadores.Count == ScriptSalaEspera.numJugadores)
-                {
-                    ReadyMsg readyMsg = new ReadyMsg();
-                    readyMsg.playerList = jugadores;
-                    readyMsg.indexMap = ElegirMapa.indexMapa;
-
-                    int numJugadores = jugadores.Count;
-                    for (int i = 0; i < numJugadores - 1; i++)
-                    {
-                        SendToClient(JsonUtility.ToJson(readyMsg), m_connections[i]);
-                    }
-                }*/
 
                 break;
-
             case Commands.MOVER_JUGADOR:
                 MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
+                if (moverRecMsg.jugador.id != "0")
+                {
+                    GameObject personaje = jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)];
 
+                    personaje.transform.position = moverRecMsg.jugador.posJugador;
+                    personaje.transform.rotation = moverRecMsg.jugador.rotacion;
+                }
+
+                for (int i = 0; i < m_connections.Length; i++)
+                {
+                    SendToClient(JsonUtility.ToJson(moverRecMsg), m_connections[i]);
+                }
 
                 break;
+            case Commands.JUGADOR_READY:
+                JugadorReady jugadorReady = JsonUtility.FromJson<JugadorReady>(recMsg);
+                jugadoresReady.Add(jugadorReady.idJugador);
+                jugadoresSimulados[jugadorReady.idJugador].SetActive(true);
+
+                break;
+
 
             default:
                 Debug.Log("Mensaje desconocido");
@@ -166,21 +208,21 @@ public class Server : MonoBehaviour
         }
     }
 
+    #endregion
+
     public void movimiento(Vector3 pos, Quaternion rotacion)
     {
-        if (jugadores.Count > 1)
-        {
-            MoverMsg moverMsg = new MoverMsg();
-            moverMsg.jugador.id = 0+"";
-            moverMsg.jugador.posJugador = pos;
-            moverMsg.jugador.rotacion = rotacion;
 
-            int numJug = jugadores.Count;
-            for (int i = 0; i < numJug - 1; i++)
-            {
-                SendToClient(JsonUtility.ToJson(moverMsg), m_connections[i]);
-            }
+        MoverMsg moverMsg = new MoverMsg();
+        moverMsg.jugador.id = 0 + "";
+        moverMsg.jugador.posJugador = pos;
+        moverMsg.jugador.rotacion = rotacion;
+
+        for (int i = 0; i < m_connections.Length; i++)
+        {
+            SendToClient(JsonUtility.ToJson(moverMsg), m_connections[i]);
         }
+
     }
 
     private void OnDisconnect(int i)
@@ -192,5 +234,16 @@ public class Server : MonoBehaviour
     {
         m_connections.Dispose();
         m_Driver.Dispose();
+    }
+
+    private void SendToClient(string message, NetworkConnection c)
+    {
+        //var writer = m_Driver.BeginSend(NetworkPipeline.Null, c);
+        DataStreamWriter writer;
+        m_Driver.BeginSend(NetworkPipeline.Null, c, out writer);
+        NativeArray<byte> bytes = new
+            NativeArray<byte>(Encoding.ASCII.GetBytes(message), Allocator.Temp);
+        writer.WriteBytes(bytes);
+        m_Driver.EndSend(writer);
     }
 }

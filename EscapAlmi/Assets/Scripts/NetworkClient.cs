@@ -16,10 +16,21 @@ public class NetworkClient : MonoBehaviour
     public NetworkConnection m_Connection;
     [Header("Puerto")]
     public ushort serverPort;
-    public List<GameObject> jugadoresGameObject;
-    public GameObject prefabJugador;
 
-    private string idPlayer;
+    [Header("LISTA DE PERSONAJES")]
+    public List<GameObject> jugadoresSimulados;
+
+    [Header("MODELO DE JUGADOR")]
+    public GameObject prefabJugador;
+    public GameObject prefabNombreJugador;
+
+    public string idPlayer;
+
+    [Header("PERSONAJE QUE SE ESTA CONTROLANDO")]
+    public GameObject myPlayer;
+
+    [Header("LISTA DE JUGADORES READY")]
+    public List<int> jugadoresReady;
 
     void Start()
     {
@@ -35,6 +46,15 @@ public class NetworkClient : MonoBehaviour
     }
 
     void Update()
+    {
+        connectionStuff();
+        foreach (var jugador in jugadoresReady)
+        {
+            jugadoresSimulados[jugador].SetActive(true);
+        }
+    }
+    #region ConnectionStuff
+    void connectionStuff()
     {
         m_Driver.ScheduleUpdate().Complete();
         if (!m_Connection.IsCreated)
@@ -62,7 +82,6 @@ public class NetworkClient : MonoBehaviour
             cmd = m_Connection.PopEvent(m_Driver, out stream);
         }
     }
-
     private void SendToServer(string v)
     {
         DataStreamWriter writer;
@@ -76,74 +95,7 @@ public class NetworkClient : MonoBehaviour
     private void OnConnect()
     {
         Debug.Log("Conectado Correctamente");
-    }
 
-    private void OnData(DataStreamReader stream)
-    {
-        NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
-        stream.ReadBytes(bytes);
-        string recMsg = Encoding.ASCII.GetString(bytes.ToArray());
-        NetworkHeader header = JsonUtility.FromJson<NetworkHeader>(recMsg);
-
-        switch (header.command)
-        {
-            case Commands.HANDSHAKE:
-                HandshakeMsg mensajeRecibido = JsonUtility.FromJson<HandshakeMsg>(recMsg);
-                //asigno la id de la conexion en cliente, para despues enviar mensajes
-                idPlayer = mensajeRecibido.player.id;
-
-                //Genero un nuevo mensaje para enviar la infromacion al servidor
-                HandshakeMsg mensajeEnviar = new HandshakeMsg();
-                SendToServer(JsonUtility.ToJson(mensajeEnviar));
-
-                break;
-
-            case Commands.READY:
-                ReadyMsg readyMsg = JsonUtility.FromJson<ReadyMsg>(recMsg);
-
-                GameObject.Find("Mapas").GetComponent<ElegirMapa>().cargarMapa(readyMsg.indexMap);
-
-                int numJugadores = readyMsg.playerList.Count;
-                
-                for (int i = 0; i < numJugadores; i++)
-                {
-                    GameObject nuevoPlayer = Instantiate(prefabJugador);
-                    jugadoresGameObject.Add(nuevoPlayer);
-                    nuevoPlayer.transform.position = new Vector3(readyMsg.playerList[i].posJugador.x, 2, readyMsg.playerList[i].posJugador.z);
-                }
-                Debug.Log("id cliente " + idPlayer);
-                jugadoresGameObject[int.Parse(idPlayer)].name = "JugadorReal";
-                GameObject.Find("Main Camera").GetComponent<CameraScript>().jugadorREAL = jugadoresGameObject[int.Parse(idPlayer)];
-
-                break;
-
-            case Commands.MOVER_JUGADOR:
-                MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
-
-                int idJug = int.Parse(moverRecMsg.jugador.id);
-                if (int.Parse(idPlayer) != idJug)
-                {
-                    jugadoresGameObject[idJug].transform.position = moverRecMsg.jugador.posJugador;
-                    jugadoresGameObject[idJug].transform.rotation = moverRecMsg.jugador.rotacion;
-                }
-
-                break;
-
-
-            default:
-                Debug.Log("Mensaje desconocido");
-                break;
-        }
-    }
-
-    public void movimiento(Vector3 pos, Quaternion rotacion)
-    {
-        MoverMsg moverMsg = new MoverMsg();
-        moverMsg.jugador.id = idPlayer;
-        moverMsg.jugador.posJugador = pos;
-        moverMsg.jugador.rotacion = rotacion;
-
-        SendToServer(JsonUtility.ToJson(moverMsg));
     }
 
     private void OnDisconnect()
@@ -156,4 +108,85 @@ public class NetworkClient : MonoBehaviour
         m_Connection.Disconnect(m_Driver);
         m_Driver.Dispose();
     }
+    #endregion
+
+    #region Recibo de Datos
+    private void OnData(DataStreamReader stream)
+    {
+        NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
+        stream.ReadBytes(bytes);
+        string recMsg = Encoding.ASCII.GetString(bytes.ToArray());
+        NetworkHeader header = JsonUtility.FromJson<NetworkHeader>(recMsg);
+
+        switch (header.command)
+        {
+            case Commands.HANDSHAKE:
+                HandshakeMsg mensajeRecibido = JsonUtility.FromJson<HandshakeMsg>(recMsg);
+                //asigno la id de la conexion en cliente, para despues enviar mensajes
+                Debug.Log("Id de Jugador: " + mensajeRecibido.player.id);
+                idPlayer = mensajeRecibido.player.id;
+                //CREACION DE TANTOS PERSONAJES COMO JUGADORES HABIA EN LA SALA DE ESPERA
+                for (int i = 0; i < mensajeRecibido.numJugadores; i++)
+                {
+                    GameObject jugadorSimulado = Instantiate(prefabJugador);
+                    jugadorSimulado.GetComponent<JugadorSimuladoScript>().enabled = true;
+                    jugadorSimulado.GetComponent<JugadorSimuladoScript>().jugadorID = i;
+                    jugadoresSimulados.Add(jugadorSimulado);
+                    
+                }
+                //LE ASIGNO EL PERSONAJE AL CLIENTE
+                myPlayer = jugadoresSimulados[int.Parse(mensajeRecibido.player.id)];
+                myPlayer.GetComponent<MovimientoJugador>().enabled = true;
+                myPlayer.GetComponent<JugadorSimuladoScript>().enabled = false;
+
+                JugadorReady jugadorReady = new JugadorReady();
+                jugadorReady.idJugador = int.Parse(idPlayer);
+                SendToServer(JsonUtility.ToJson(jugadorReady));
+                break;
+
+            case Commands.READY:
+                ReadyMsg readyMsg = JsonUtility.FromJson<ReadyMsg>(recMsg);
+                GameObject.Find("Mapas").GetComponent<ElegirMapa>().cargarMapa(readyMsg.indexMap);
+
+                break;
+
+            case Commands.MOVER_JUGADOR:
+                MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
+                Debug.Log(moverRecMsg.jugador.id + " | " + moverRecMsg.jugador.posJugador);
+                if(moverRecMsg.jugador.id != idPlayer)
+                {
+                    GameObject personaje = jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)];
+
+                    personaje.transform.position = moverRecMsg.jugador.posJugador;
+                    personaje.transform.rotation = moverRecMsg.jugador.rotacion;
+                }
+
+                break;
+
+            case Commands.MANTENER_CONEXION:
+                MantenerConexion mantenerConexion = JsonUtility.FromJson<MantenerConexion>(recMsg);
+                jugadoresReady = mantenerConexion.jugadoresReady;
+
+
+
+                break;
+            default:
+                Debug.Log(header.command + " No disponible");
+                break;
+        }
+    }
+
+
+    #endregion
+    public void movimiento(Vector3 pos, Quaternion rotacion)
+    {
+        MoverMsg moverMsg = new MoverMsg();
+        moverMsg.jugador.id = idPlayer;
+        moverMsg.jugador.posJugador = pos;
+        moverMsg.jugador.rotacion = rotacion;
+
+        SendToServer(JsonUtility.ToJson(moverMsg));
+    }
+
+
 }

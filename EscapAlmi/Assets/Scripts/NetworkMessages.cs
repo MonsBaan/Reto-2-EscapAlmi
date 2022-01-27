@@ -30,7 +30,7 @@ namespace NetworkObject
     {
         public enum Commands
         {
-            HANDSHAKE, HANDSHAKE_SALAESPERA, MANTENER_CONEXION_SALAESPERA, CONEXION, READY, MOVER_JUGADOR, CAMBIO_ESCENA
+            HANDSHAKE, HANDSHAKE_SALAESPERA, MANTENER_CONEXION_SALAESPERA, MANTENER_CONEXION, READY, JUGADOR_READY, MOVER_JUGADOR, CAMBIO_ESCENA
         }
 
         [System.Serializable]
@@ -38,14 +38,17 @@ namespace NetworkObject
         {
             public Commands command;
         }
+
         [System.Serializable]
         public class HandshakeMsg : NetworkHeader
         {
             public NetworkObject.Jugador player;
+            public int numJugadores;
             public HandshakeMsg()
             {
                 command = Commands.HANDSHAKE;
                 player = new NetworkObject.Jugador();
+                numJugadores = -1;
             }
         }
 
@@ -72,13 +75,16 @@ namespace NetworkObject
         [System.Serializable]
         public class ReadyMsg : NetworkHeader
         {
+            public int idJugador;
             public List<NetworkObject.Jugador> playerList;
             public int indexMap;
+            public int numJugadores;
             public ReadyMsg()
             {
                 command = Commands.READY;
                 playerList = new List<NetworkObject.Jugador>();
                 indexMap = -1;
+                numJugadores = -1;
             }
         }
         [System.Serializable]
@@ -101,6 +107,29 @@ namespace NetworkObject
                 command = Commands.CAMBIO_ESCENA;
             }
         }
+
+        [System.Serializable]
+        public class JugadorReady: NetworkHeader
+        {
+            public int idJugador;
+            public JugadorReady()
+            {
+                command = Commands.JUGADOR_READY;
+                idJugador = -1;
+            }
+        }
+
+        [System.Serializable]
+        public class MantenerConexion : NetworkHeader
+        {
+            public List<int> jugadoresReady;
+            public MantenerConexion()
+            {
+                command = Commands.MANTENER_CONEXION;
+                jugadoresReady = new List<int>();
+            }
+        }
+
     }
 
 }

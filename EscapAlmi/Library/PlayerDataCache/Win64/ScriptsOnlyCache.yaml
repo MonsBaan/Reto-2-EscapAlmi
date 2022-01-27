@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - CameraScript
     - ElegirMapa
+    - JugadorSimuladoScript
     - MainMenuController
     - MazeSpawner
     - MovimientoJugador
@@ -23,6 +24,7 @@ ScriptsOnlyBuild:
     - IngameDebugConsole.DebugsOnScrollListener
     Unity.CollabProxy.Editor.dll:
     - Unity.Cloud.Collaborate.UserInterface.CollaborateWindow
+    - Unity.Cloud.Collaborate.UserInterface.WindowCache
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.Graphs.dll:
@@ -87,8 +89,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
-    - Class: 89
-      Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
     - Class: 95
@@ -146,25 +146,27 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9040}
     - Class: 114
-      Script: {instanceID: 9304}
+      Script: {instanceID: 9302}
     - Class: 114
-      Script: {instanceID: 9310}
+      Script: {instanceID: 9308}
     - Class: 114
-      Script: {instanceID: 9536}
+      Script: {instanceID: 9534}
     - Class: 114
-      Script: {instanceID: 9574}
+      Script: {instanceID: 9572}
     - Class: 114
-      Script: {instanceID: 9578}
+      Script: {instanceID: 9576}
     - Class: 114
-      Script: {instanceID: 9680}
+      Script: {instanceID: 9678}
     - Class: 114
-      Script: {instanceID: 9760}
+      Script: {instanceID: 9758}
     - Class: 114
-      Script: {instanceID: 9858}
+      Script: {instanceID: 9856}
     - Class: 114
-      Script: {instanceID: 10232}
+      Script: {instanceID: 10230}
     - Class: 114
-      Script: {instanceID: 10316}
+      Script: {instanceID: 10314}
+    - Class: 114
+      Script: {instanceID: 10452}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -201,6 +203,8 @@ ScriptsOnlyBuild:
     - Class: 74
       Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 89
       Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
@@ -243,11 +247,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9028}
     - Class: 114
-      Script: {instanceID: 9304}
+      Script: {instanceID: 9302}
     - Class: 114
-      Script: {instanceID: 9574}
+      Script: {instanceID: 9572}
     - Class: 114
-      Script: {instanceID: 9760}
+      Script: {instanceID: 9758}
     - Class: 114
       Script: {instanceID: 10678}
     - Class: 115
@@ -311,7 +315,7 @@ ScriptsOnlyBuild:
     className: TMP_InputField
   - hash:
       serializedVersion: 2
-      Hash: cea0f0b93bdbf5feff7871c5a9acdbdf
+      Hash: a1a43032d64dd04801bf3b92d7deb356
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkClient
@@ -407,7 +411,7 @@ ScriptsOnlyBuild:
     className: ScriptTexto
   - hash:
       serializedVersion: 2
-      Hash: f1d735cc1a21c3704ab52568f4fbfcf8
+      Hash: 91d258529db2b5060a913f2afcea1a21
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner
     className: PlaymodeTestsController
@@ -587,7 +591,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: ebe5a4d293dfe87ab8f8028df02c3a14
+      Hash: 512c67b2036249b685b91d376c787eca
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ScriptLuz
@@ -605,7 +609,7 @@ ScriptsOnlyBuild:
     className: VerticalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: 07f3c0ed5981db5a48184f0bf9ad1452
+      Hash: 5ff7acd5b4228447810071eaca523fca
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Server
@@ -677,7 +681,7 @@ ScriptsOnlyBuild:
     className: EventTrigger
   - hash:
       serializedVersion: 2
-      Hash: f8fc24dfc0e8568aac4bf4130e1bed6e
+      Hash: 57beb2b13208c8d6241bc5a4dd0e33c4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CameraScript
@@ -801,6 +805,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MovimientoJugador
+  - hash:
+      serializedVersion: 2
+      Hash: f4e5a697c5d286c63d00e1bde71fb89a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: JugadorSimuladoScript
   - hash:
       serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
