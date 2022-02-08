@@ -127,3 +127,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocidadFlotar: 0.5
   velocidadRotacion: 0.03
+  esteIndex: 0

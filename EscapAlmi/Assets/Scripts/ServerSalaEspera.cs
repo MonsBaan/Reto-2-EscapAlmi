@@ -10,6 +10,10 @@ using System;
 using Random = UnityEngine.Random;
 using NetworkObject.NetworkMessages;
 using UnityEngine.SceneManagement;
+using System.Net;
+using System.Linq;
+using UnityEngine.UI;
+using System.Net.Sockets;
 
 public class ServerSalaEspera : MonoBehaviour
 {
@@ -20,14 +24,17 @@ public class ServerSalaEspera : MonoBehaviour
     public NativeList<NetworkConnection> m_connections;
 
     public bool juegoEmpezado = false;
-    public GameObject btnEmpezar;
+    public GameObject btnEmpezar, TextIP;
+
     public List<NetworkObject.NetworkObject.Jugador> listaJugadores;
 
     public static int numJugadores;
 
 
-    void Start()
+    private void OnEnable()
     {
+        TextIP.SetActive(true);
+
         m_Driver = NetworkDriver.Create();
         var endpoint = NetworkEndPoint.AnyIpv4;
         endpoint.Port = serverPort;
@@ -41,7 +48,13 @@ public class ServerSalaEspera : MonoBehaviour
             m_Driver.Listen();
             GetComponent<ScriptSalaEspera>().añadirJugador("Server");
             NetworkObject.NetworkObject.Jugador jugadorNuevo = new NetworkObject.NetworkObject.Jugador();
-            jugadorNuevo.nombre = "Servidor"; //CAMBIAR ESTO CUANDO TENGAMOS LOGIN DE USER
+
+            if(MainMenuController.nombreCuentaJugador == ""){
+                MainMenuController.nombreCuentaJugador = "Servidor";
+            }
+
+            jugadorNuevo.nombre = MainMenuController.nombreCuentaJugador;
+
             listaJugadores.Add(jugadorNuevo);
             btnEmpezar.SetActive(true);
             Debug.Log("Servidor Abierto: " + serverPort);
@@ -49,6 +62,7 @@ public class ServerSalaEspera : MonoBehaviour
         }
         m_connections = new NativeList<NetworkConnection>(20, Allocator.Persistent);
 
+        TextIP.GetComponent<Text>().text = "IP: " + GetLocalIPv4();
     }
 
     void Update()
@@ -78,16 +92,16 @@ public class ServerSalaEspera : MonoBehaviour
         {
             case Commands.HANDSHAKE_SALAESPERA:
                 HandshakeSalaEspera handshake = JsonUtility.FromJson<HandshakeSalaEspera>(msgRecibido);
-                if (handshake.player.nombre.Equals(""))
-                {
-                    handshake.player.nombre = "Invitado"+listaJugadores.Count;
-                }
+                handshake.player.nombre = handshake.player.nombre + listaJugadores.Count;
+                
                 listaJugadores.Add(handshake.player);
                 break;
         }
 
 
     }
+
+    #region Connection Stuff
     //  PARSEAR DATOS PARA ENVIAR AL CLIENTE
     private void SendToClient(string message, NetworkConnection c)
     {
@@ -171,8 +185,8 @@ public class ServerSalaEspera : MonoBehaviour
                 else if (cmd == NetworkEvent.Type.Disconnect)
                 {
                     OnDisconnect(i);
-                    Debug.Log("Jugador " + i+1 + " desconectado");
-                    listaJugadores.RemoveAt(i+1);
+                    Debug.Log("Jugador " + i + 1 + " desconectado");
+                    listaJugadores.RemoveAt(i + 1);
 
                 }
                 //pasamos al siguiente mensaje
@@ -181,6 +195,23 @@ public class ServerSalaEspera : MonoBehaviour
         }
 
     }
+    public string GetLocalIPv4()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            Debug.Log(ip.ToString());
+
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        return "Nada";
+    }
+
+    #endregion
+
     public void empezarJuego()
     {
 
@@ -193,6 +224,9 @@ public class ServerSalaEspera : MonoBehaviour
             SendToClient(JsonUtility.ToJson(cambiarEscena), m_connections[i]);
         }
 
-
     }
+
+
+
+
 }

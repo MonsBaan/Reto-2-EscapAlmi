@@ -13,6 +13,10 @@ TagManager:
   - RevientaMuros
   - Arena
   - Muro
+  - MuroInvencible
+  - Fin
+  - PlayerFin
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

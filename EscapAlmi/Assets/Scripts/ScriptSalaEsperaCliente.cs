@@ -17,16 +17,17 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
     private GameObject server;
     public bool conectado;
 
-    public GameObject btnEmpezar;
+    public GameObject btnEmpezar, TextIP;
 
     public List<NetworkObject.NetworkObject.Jugador> listaJugadores;
     public int idJugador;
 
 
     // Start is called before the first frame update
-    void Start()
+
+    private void OnEnable()
     {
-        Debug.Log(serverIp);
+        TextIP.SetActive(false);
 
         btnEmpezar.SetActive(false);
 
@@ -36,9 +37,52 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
         m_Connection = m_Driver.Connect(endpoint);
         conectado = true;
 
+        if (MainMenuController.nombreCuentaJugador == "")
+        {
+            MainMenuController.nombreCuentaJugador = "Invitado";
+        }
+
     }
 
     void Update()
+    {
+        ConnectionStuff();
+    }
+
+    private void OnData(DataStreamReader stream)
+    {
+        NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
+        stream.ReadBytes(bytes);
+        string recMsg = Encoding.ASCII.GetString(bytes.ToArray());
+        NetworkHeader header = JsonUtility.FromJson<NetworkHeader>(recMsg);
+
+        switch (header.command)
+        {
+            case Commands.HANDSHAKE_SALAESPERA:
+                HandshakeSalaEspera handshake = JsonUtility.FromJson<HandshakeSalaEspera>(recMsg);
+                if (MainMenuController.nombreCuentaJugador == "Invitado")
+                    MainMenuController.nombreCuentaJugador = MainMenuController.nombreCuentaJugador + idJugador;
+                idJugador = int.Parse(handshake.player.id);
+                break;
+            case Commands.MANTENER_CONEXION_SALAESPERA:
+                MantenerConexionSalaEspera mantenerConexion = JsonUtility.FromJson<MantenerConexionSalaEspera>(recMsg);
+                listaJugadores = mantenerConexion.listaJugadores;
+                break;
+            case Commands.CAMBIO_ESCENA:
+                CambiarEscena cambiarEscena = JsonUtility.FromJson<CambiarEscena>(recMsg);
+                SceneManager.LoadScene("InGame");
+                OnDisconnect();
+
+
+                break;
+            default:
+                Debug.Log("Mensaje desconocido");
+                break;
+        }
+    }
+
+    #region Connection Stuff
+    void ConnectionStuff()
     {
         if (conectado)
         {
@@ -70,50 +114,28 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
             cmd = m_Connection.PopEvent(m_Driver, out stream);
         }
     }
-
-    private void OnData(DataStreamReader stream)
-    {
-        NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
-        stream.ReadBytes(bytes);
-        string recMsg = Encoding.ASCII.GetString(bytes.ToArray());
-        NetworkHeader header = JsonUtility.FromJson<NetworkHeader>(recMsg);
-
-        switch (header.command)
-        {
-            case Commands.HANDSHAKE_SALAESPERA:
-                HandshakeSalaEspera handshake = JsonUtility.FromJson<HandshakeSalaEspera>(recMsg);
-                idJugador = int.Parse(handshake.player.id);
-                break;
-            case Commands.MANTENER_CONEXION_SALAESPERA:
-                MantenerConexionSalaEspera mantenerConexion = JsonUtility.FromJson<MantenerConexionSalaEspera>(recMsg);
-                listaJugadores = mantenerConexion.listaJugadores;
-                break;
-            case Commands.CAMBIO_ESCENA:
-                CambiarEscena cambiarEscena = JsonUtility.FromJson<CambiarEscena>(recMsg);
-                SceneManager.LoadScene("InGame");
-                OnDisconnect();
-
-                break;
-            default:
-                Debug.Log("Mensaje desconocido");
-                break;
-        }
-    }
-
-
-
-
     private void OnConnect()
     {
         Debug.Log("Conexion con el Servidor");
         HandshakeSalaEspera handshake = new HandshakeSalaEspera();
+        handshake.player.nombre = MainMenuController.nombreCuentaJugador;
         SendToServer(JsonUtility.ToJson(handshake));
 
     }
     public void OnDisconnect()
     {
         Debug.Log("Desconectado");
-        m_Connection.Disconnect(m_Driver);
+        try
+        {
+            m_Connection.Disconnect(m_Driver);
+
+        }
+        catch (System.NullReferenceException)
+        {
+        }
+
+
+        this.enabled = false;
     }
 
     public void OnDestroy()
@@ -131,6 +153,11 @@ public class ScriptSalaEsperaCliente : MonoBehaviour
         writer.WriteBytes(bytes);
         m_Driver.EndSend(writer);
     }
+    #endregion
+
+
+
+
 
 
 

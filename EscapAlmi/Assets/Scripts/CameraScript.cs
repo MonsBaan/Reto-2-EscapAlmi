@@ -36,4 +36,11 @@ public class CameraScript : MonoBehaviour
         }
 
     }
+
+    public void cambioFin()
+    {
+        this.gameObject.transform.position = new Vector3(30, 70, 34);
+        GameObject.Find("Items").SetActive(false);
+        this.gameObject.GetComponent<CameraScript>().enabled = false;
+    }
 }

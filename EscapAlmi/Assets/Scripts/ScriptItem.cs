@@ -9,6 +9,10 @@ public class ScriptItem : MonoBehaviour
     public float velocidadRotacion;
     private Transform miTransform;
     private Vector3 direccion = Vector3.up;
+    public int esteIndex;
+
+    public float tiempoRespawn = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,49 +32,68 @@ public class ScriptItem : MonoBehaviour
 
         miTransform.Translate(direccion * velocidadFlotar * Time.deltaTime);
         miTransform.RotateAround(Vector3.up, velocidadRotacion);
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Player"))
+        if (other.tag.Equals("Player") && other.gameObject.GetComponent<MovimientoJugador>().isActiveAndEnabled)
         {
             if (this.gameObject.tag.Equals("Coin"))
             {
                 GameObject.Find("Monedas").GetComponent<Text>().text = int.Parse(GameObject.Find("Monedas").GetComponent<Text>().text) + 31 + "";
+
+                if (MainMenuController.esServer)
+                {
+                    GameObject.Find("Server").GetComponent<Server>().itemGet(esteIndex, "moneda");
+                    this.gameObject.SetActive(false);
+                }
+                else
+                {
+                    GameObject.Find("Cliente").GetComponent<NetworkClient>().itemGet(esteIndex, "moneda");
+                }
             }
 
             if (this.gameObject.tag.Equals("Arena"))
             {
-                string cantidad = GameObject.Find("Item1").transform.GetChild(0).gameObject.GetComponent<Text>().text;
-                GameObject.Find("Item1").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+                powerup("Item1");
             }
             if (this.gameObject.tag.Equals("Botas"))
             {
-                string cantidad = GameObject.Find("Item2").transform.GetChild(0).gameObject.GetComponent<Text>().text;
-                GameObject.Find("Item2").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+                powerup("Item2");
             }
             if (this.gameObject.tag.Equals("Lupa"))
             {
-                string cantidad = GameObject.Find("Item3").transform.GetChild(0).gameObject.GetComponent<Text>().text;
-                GameObject.Find("Item3").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+                powerup("Item3");
             }
             if (this.gameObject.tag.Equals("RevientaMuros"))
             {
-                string cantidad = GameObject.Find("Item4").transform.GetChild(0).gameObject.GetComponent<Text>().text;
-                GameObject.Find("Item4").transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+                powerup("Item4");
             }
 
-            if (MainMenuController.esServer)
-            {
-                //GameObject.Find("Server").GetComponent<Server>().coin(GameObject.Find("Mapas").GetComponent<ElegirMapa>().indexMoneda(this.gameObject));
-            }
-            else
-            {
-                //GameObject.Find("Cliente").GetComponent<NetworkClient>()
-            }
-
-            this.gameObject.SetActive(false);
         }
     }
+
+    public void powerup(string itemName)
+    {
+        string cantidad = GameObject.Find(itemName).transform.GetChild(0).gameObject.GetComponent<Text>().text;
+        GameObject.Find(itemName).transform.GetChild(0).gameObject.GetComponent<Text>().text = int.Parse(cantidad) + 1 + "";
+
+        if (MainMenuController.esServer)
+        {
+            GameObject.Find("Server").GetComponent<Server>().itemGet(esteIndex, "powerup");
+            //GameObject.Find("MapaActual(Clone)").GetComponent<ScriptLaberintoOK>().poolItems[esteIndex].SetActive(false);
+            //desacPowerup();
+            this.gameObject.SetActive(false);
+        }
+        else
+        {
+            GameObject.Find("Cliente").GetComponent<NetworkClient>().itemGet(esteIndex, "powerup");
+        }
+    }
+
+    public void setIndex(int index)
+    {
+        esteIndex = index;
+    }
+
 }

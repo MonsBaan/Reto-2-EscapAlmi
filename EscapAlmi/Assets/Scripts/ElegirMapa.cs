@@ -1,3 +1,4 @@
+using NetworkObject.NetworkMessages;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -10,9 +11,14 @@ public class ElegirMapa : MonoBehaviour
     public GameObject cliente;
     public GameObject[] arrayMapas;
     public static int indexMapa;
+    public GameObject textoSalida;
 
-    public float sec;
-    public int min;
+    public float tiempoRespawnItems = 10;
+    public float secTotal = 0;
+
+    public float sec, min = 0;
+
+    public static GameObject fin;
 
     // Start is called before the first frame update
     void Start()
@@ -22,37 +28,120 @@ public class ElegirMapa : MonoBehaviour
             server.SetActive(true);
 
             indexMapa = Random.Range(0, arrayMapas.Length);
+            arrayMapas[indexMapa].name = "MapaActual";
+
             Instantiate(arrayMapas[indexMapa]);
         }
         else
         {
             cliente.SetActive(true);
         }
+
+
     }
 
     private void Update()
     {
-        sec += Time.deltaTime;
-        if (sec >= 60)
+        timerItems();
+
+        if (!MainMenuController.esServer)
+            return;
+
+        min = Mathf.FloorToInt(secTotal / 60F);
+        sec = Mathf.FloorToInt(secTotal - min * 60);
+
+        if (min == 5)
         {
-            sec = 0;
-            min++;
+            //GameObject.Find("Server").GetComponent<Server>().terminarPartida();
+
         }
-        string secStr = sec.ToString("#");
-        if (sec <= 9)
+        else if (min >= 4)
         {
-            secStr = "0" + secStr;
+            GameObject.Find("Tiempo").GetComponent<Text>().color = Color.red;
+            textoSalida.GetComponent<Text>().color = Color.red;
         }
-        GameObject.Find("Tiempo").GetComponent<Text>().text = min + ":" + secStr;
+        else if (min >= 1)
+        {
+            Color greenColor;
+            ColorUtility.TryParseHtmlString("#0AC742", out greenColor);
+
+            GameObject.Find("Tiempo").GetComponent<Text>().color = greenColor;
+            textoSalida.GetComponent<Text>().color = greenColor;
+            textoSalida.SetActive(true);
+            fin.SetActive(true);
+
+        }
+        else if (min < 1)
+        {
+            fin.SetActive(false);
+            textoSalida.SetActive(false);
+        }
+
+        string niceTime = string.Format("{0:0}:{1:00}", min, sec);
+        GameObject.Find("Tiempo").GetComponent<Text>().text = niceTime;
+
+        secTotal += 1;
+
+        TiempoMsg tiempo = new TiempoMsg();
+        tiempo.min = min;
+        tiempo.sec = sec;
+        for (int i = 0; i < server.GetComponent<Server>().m_connections.Length; i++)
+        {
+            server.GetComponent<Server>().SendToClient(JsonUtility.ToJson(tiempo), server.GetComponent<Server>().m_connections[i]);
+        }
+
+    }
+
+    public void changeTiempo(float min, float sec)
+    {
+        string niceTime = string.Format("{0:0}:{1:00}", min, sec);
+        GameObject.Find("Tiempo").GetComponent<Text>().text = niceTime;
+
+        if (min >= 4)
+        {
+            GameObject.Find("Tiempo").GetComponent<Text>().color = Color.red;
+            textoSalida.GetComponent<Text>().color = Color.red;
+        }
+        else if (min >= 1)
+        {
+            Color greenColor;
+            ColorUtility.TryParseHtmlString("#0AC742", out greenColor);
+
+            GameObject.Find("Tiempo").GetComponent<Text>().color = greenColor;
+            textoSalida.GetComponent<Text>().color = greenColor;
+            textoSalida.SetActive(true);
+            fin.SetActive(true);
+
+        }
+        else if (min < 1)
+        {
+            fin.SetActive(false);
+            textoSalida.SetActive(false);
+        }
     }
 
     public void cargarMapa(int index)
     {
+        arrayMapas[indexMapa].name = "MapaActual";
         Instantiate(arrayMapas[index]);
     }
 
-    public int indexMoneda(GameObject moneda)
+    public void timerItems()
     {
-        return arrayMapas[indexMapa].GetComponent<MazeSpawner>().poolCoins.IndexOf(moneda);
+        foreach (var item in GameObject.Find("MapaActual(Clone)").GetComponent<ScriptLaberintoOK>().poolItems)
+        {
+            if (!item.activeSelf)
+            {
+                if (item.GetComponent<ScriptItem>().tiempoRespawn >= tiempoRespawnItems)
+                {
+                    item.GetComponent<ScriptItem>().tiempoRespawn = 0;
+                    item.SetActive(true);
+                }
+                else
+                {
+                    item.GetComponent<ScriptItem>().tiempoRespawn += Time.deltaTime;
+                }
+            }
+        }
     }
 }

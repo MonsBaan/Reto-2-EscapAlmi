@@ -9,6 +9,8 @@ using UnityEngine.UI;
 using NetworkObject.NetworkMessages;
 using NetworkObject;
 using System;
+using UnityEngine.SceneManagement;
+using Proyecto26;
 
 public class NetworkClient : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class NetworkClient : MonoBehaviour
 
     [Header("LISTA DE PERSONAJES")]
     public List<GameObject> jugadoresSimulados;
+    public List<GameObject> jugadoresNombres;
 
     [Header("MODELO DE JUGADOR")]
     public GameObject prefabJugador;
@@ -28,10 +31,16 @@ public class NetworkClient : MonoBehaviour
 
     [Header("PERSONAJE QUE SE ESTA CONTROLANDO")]
     public GameObject myPlayer;
+    public GameObject myText;
 
     [Header("LISTA DE JUGADORES READY")]
     public List<int> jugadoresReady;
 
+    private bool jugadoresActivados = false;
+
+    private bool spawneado = false;
+
+    private bool dineros = false;
     void Start()
     {
         Conectar();
@@ -48,9 +57,23 @@ public class NetworkClient : MonoBehaviour
     void Update()
     {
         connectionStuff();
+
+        if (!spawneado && myPlayer != null)
+        {
+            GameObject spawnpoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+            float numRandom1 = UnityEngine.Random.Range(-5, +5);
+            float numRandom2 = UnityEngine.Random.Range(-5, +5);
+
+            myPlayer.transform.position = new Vector3(spawnpoint.transform.position.x + numRandom1, spawnpoint.transform.position.y, spawnpoint.transform.position.z + numRandom2);
+            spawneado = true;
+        }
+
         foreach (var jugador in jugadoresReady)
         {
-            jugadoresSimulados[jugador].SetActive(true);
+            if (!jugadoresSimulados[jugador].tag.Equals("PlayerFin"))
+            {
+                jugadoresSimulados[jugador].SetActive(true);
+            }
         }
     }
     #region ConnectionStuff
@@ -113,6 +136,7 @@ public class NetworkClient : MonoBehaviour
     #region Recibo de Datos
     private void OnData(DataStreamReader stream)
     {
+
         NativeArray<byte> bytes = new NativeArray<byte>(stream.Length, Allocator.Temp);
         stream.ReadBytes(bytes);
         string recMsg = Encoding.ASCII.GetString(bytes.ToArray());
@@ -125,6 +149,7 @@ public class NetworkClient : MonoBehaviour
                 //asigno la id de la conexion en cliente, para despues enviar mensajes
                 Debug.Log("Id de Jugador: " + mensajeRecibido.player.id);
                 idPlayer = mensajeRecibido.player.id;
+
                 //CREACION DE TANTOS PERSONAJES COMO JUGADORES HABIA EN LA SALA DE ESPERA
                 for (int i = 0; i < mensajeRecibido.numJugadores; i++)
                 {
@@ -132,15 +157,26 @@ public class NetworkClient : MonoBehaviour
                     jugadorSimulado.GetComponent<JugadorSimuladoScript>().enabled = true;
                     jugadorSimulado.GetComponent<JugadorSimuladoScript>().jugadorID = i;
                     jugadoresSimulados.Add(jugadorSimulado);
-                    
+
+                    GameObject textoJugador = Instantiate(prefabNombreJugador);
+                    textoJugador.GetComponent<TextMesh>().text = "";
+                    jugadoresNombres.Add(textoJugador);
                 }
+
                 //LE ASIGNO EL PERSONAJE AL CLIENTE
                 myPlayer = jugadoresSimulados[int.Parse(mensajeRecibido.player.id)];
+                myText = jugadoresNombres[int.Parse(mensajeRecibido.player.id)];
+                myText.GetComponent<TextMesh>().text = MainMenuController.nombreCuentaJugador;
+                myText.GetComponent<ScriptTexto>().jugador = myPlayer;
+                myText.SetActive(true);
+
                 myPlayer.GetComponent<MovimientoJugador>().enabled = true;
                 myPlayer.GetComponent<JugadorSimuladoScript>().enabled = false;
 
                 JugadorReady jugadorReady = new JugadorReady();
                 jugadorReady.idJugador = int.Parse(idPlayer);
+                jugadorReady.nombre = MainMenuController.nombreCuentaJugador;
+
                 SendToServer(JsonUtility.ToJson(jugadorReady));
                 break;
 
@@ -152,14 +188,8 @@ public class NetworkClient : MonoBehaviour
 
             case Commands.MOVER_JUGADOR:
                 MoverMsg moverRecMsg = JsonUtility.FromJson<MoverMsg>(recMsg);
-                Debug.Log(moverRecMsg.jugador.id + " | " + moverRecMsg.jugador.posJugador);
-                if(moverRecMsg.jugador.id != idPlayer)
-                {
-                    GameObject personaje = jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)];
+                moveJugadorMsg(moverRecMsg);
 
-                    personaje.transform.position = moverRecMsg.jugador.posJugador;
-                    personaje.transform.rotation = moverRecMsg.jugador.rotacion;
-                }
 
                 break;
 
@@ -167,9 +197,75 @@ public class NetworkClient : MonoBehaviour
                 MantenerConexion mantenerConexion = JsonUtility.FromJson<MantenerConexion>(recMsg);
                 jugadoresReady = mantenerConexion.jugadoresReady;
 
+                break;
+
+            case Commands.ITEM_GET:
+                ItemMsg itemMsg = JsonUtility.FromJson<ItemMsg>(recMsg);
+
+                if (itemMsg.tipo.Equals("moneda"))
+                {
+                    GameObject.Find("MapaActual(Clone)").GetComponent<ScriptLaberintoOK>().poolCoins[itemMsg.indexItem].SetActive(false);
+                }
+                else if (itemMsg.tipo.Equals("powerup"))
+                {
+                    GameObject.Find("MapaActual(Clone)").GetComponent<ScriptLaberintoOK>().poolItems[itemMsg.indexItem].SetActive(false);
+                }
+
+                break;
+
+            case Commands.DISPARO:
+                DisparoMsg disparoMsg = JsonUtility.FromJson<DisparoMsg>(recMsg);
+
+                jugadoresSimulados[disparoMsg.idPlayer].transform.GetChild(2).gameObject.SetActive(true);
+
+                break;
+
+            case Commands.ACTIVAR_ARENA:
+                ActivarArenaMsg activarArenaMsg = JsonUtility.FromJson<ActivarArenaMsg>(recMsg);
+
+                jugadoresSimulados[activarArenaMsg.idPlayer].transform.GetChild(1).gameObject.SetActive(true);
+
+                break;
+
+            case Commands.ARENA:
+                ArenaMsg arenaMsg = JsonUtility.FromJson<ArenaMsg>(recMsg);
+
+                if (arenaMsg.idJugador == int.Parse(idPlayer))
+                {
+                    myPlayer.GetComponent<MovimientoJugador>().arena();
+                }
+
+                break;
+
+            case Commands.FIN_PLAYER:
+                FinPlayerMsg finPlayerMsg = JsonUtility.FromJson<FinPlayerMsg>(recMsg);
+                jugadoresSimulados[finPlayerMsg.idJugador].tag = "PlayerFin";
+                jugadoresSimulados[finPlayerMsg.idJugador].SetActive(false);
+                jugadoresNombres[finPlayerMsg.idJugador].SetActive(false);
 
 
                 break;
+
+            case Commands.CAMBIO_ESCENA:
+                CambiarEscena cambiarEscena = JsonUtility.FromJson<CambiarEscena>(recMsg);
+
+                MainMenuController.monedasJugador += int.Parse(GameObject.Find("Monedas").GetComponent<Text>().text);
+                if (!dineros)
+                {
+                    guardarPerfil(MainMenuController.monedasJugador);
+                    dineros = true;
+                }
+
+
+                break;
+            case Commands.TIEMPO:
+                TiempoMsg tiempo = JsonUtility.FromJson<TiempoMsg>(recMsg);
+                GameObject.Find("Mapas").GetComponent<ElegirMapa>().changeTiempo(tiempo.min, tiempo.sec);
+
+
+
+                break;
+
             default:
                 Debug.Log(header.command + " No disponible");
                 break;
@@ -178,15 +274,98 @@ public class NetworkClient : MonoBehaviour
 
 
     #endregion
+
+    void moveJugadorMsg(MoverMsg moverRecMsg)
+    {
+        if (moverRecMsg.skin != -1)
+            jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)].GetComponent<MeshRenderer>().material = MainMenuController.materialesStatic[moverRecMsg.skin+1];
+
+
+        if (moverRecMsg.jugador.id != idPlayer)
+        {
+            GameObject personaje = jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)];
+
+            personaje.transform.position = moverRecMsg.jugador.posJugador;
+            personaje.transform.rotation = moverRecMsg.jugador.rotacion;
+
+            GameObject texto = jugadoresNombres[int.Parse(moverRecMsg.jugador.id)];
+            texto.GetComponent<TextMesh>().text = moverRecMsg.jugador.nombre;
+            texto.GetComponent<ScriptTexto>().enabled = false;
+
+            if (!texto.activeSelf)
+                texto.SetActive(true);
+
+            texto.transform.position = moverRecMsg.posTextJugador;
+        }
+    }
+
+
     public void movimiento(Vector3 pos, Quaternion rotacion)
     {
         MoverMsg moverMsg = new MoverMsg();
         moverMsg.jugador.id = idPlayer;
+        moverMsg.jugador.nombre = MainMenuController.nombreCuentaJugador;
         moverMsg.jugador.posJugador = pos;
         moverMsg.jugador.rotacion = rotacion;
+        moverMsg.skin = MainMenuController.skinActual;
+
+        moverMsg.posTextJugador = myText.transform.position;
 
         SendToServer(JsonUtility.ToJson(moverMsg));
     }
 
+    public void itemGet(int index, string tipo)
+    {
+        ItemMsg itemMsg = new ItemMsg();
+        itemMsg.indexItem = index;
+        itemMsg.tipo = tipo;
 
+        SendToServer(JsonUtility.ToJson(itemMsg));
+    }
+
+    public void disparo()
+    {
+        DisparoMsg disparoMsg = new DisparoMsg();
+        disparoMsg.idPlayer = int.Parse(idPlayer);
+
+        SendToServer(JsonUtility.ToJson(disparoMsg));
+    }
+
+    public void activarArena()
+    {
+        ActivarArenaMsg activarArenaMsg = new ActivarArenaMsg();
+        activarArenaMsg.idPlayer = int.Parse(idPlayer);
+
+        SendToServer(JsonUtility.ToJson(activarArenaMsg));
+    }
+
+    public void efectoArena(int idJugador)
+    {
+        ArenaMsg arenaMsg = new ArenaMsg();
+        arenaMsg.idJugador = idJugador;
+
+        SendToServer(JsonUtility.ToJson(arenaMsg));
+    }
+
+    public void finPlayer()
+    {
+        FinPlayerMsg finPlayerMsg = new FinPlayerMsg();
+        finPlayerMsg.idJugador = int.Parse(idPlayer);
+
+        SendToServer(JsonUtility.ToJson(finPlayerMsg));
+
+        GameObject.Find("Main Camera").GetComponent<CameraScript>().cambioFin();
+    }
+    public void guardarPerfil(int monedas)
+    {
+        UpdateCompraSymfony updateCompraSymfony = new UpdateCompraSymfony();
+        updateCompraSymfony.id = MainMenuController.idCuentaJugador;
+        updateCompraSymfony.monedas = monedas;
+
+        RestClient.Put("https://escapalmisymfony.duckdns.org/update", JsonUtility.ToJson(updateCompraSymfony)).Then(res =>
+        {
+            SceneManager.LoadScene("Menu");
+            OnDisconnect();
+        });
+    }
 }

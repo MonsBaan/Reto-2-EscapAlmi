@@ -30,7 +30,23 @@ namespace NetworkObject
     {
         public enum Commands
         {
-            HANDSHAKE, HANDSHAKE_SALAESPERA, MANTENER_CONEXION_SALAESPERA, MANTENER_CONEXION, READY, JUGADOR_READY, MOVER_JUGADOR, CAMBIO_ESCENA
+            HANDSHAKE,
+            HANDSHAKE_SALAESPERA,
+            MANTENER_CONEXION_SALAESPERA,
+            MANTENER_CONEXION,
+            READY,
+            JUGADOR_READY,
+            MOVER_JUGADOR,
+            CAMBIO_ESCENA,
+            ITEM_GET,
+            DISPARO,
+            ACTIVAR_ARENA,
+            ARENA,
+            FIN_PLAYER,
+            FIN_JUEGO,
+            POST_LOGIN,
+            RES_LOGIN,
+            TIEMPO
         }
 
         [System.Serializable]
@@ -91,6 +107,8 @@ namespace NetworkObject
         public class MoverMsg : NetworkHeader
         {
             public NetworkObject.Jugador jugador;
+            public Vector3 posTextJugador;
+            public int skin;
             public MoverMsg()
             {
                 command = Commands.MOVER_JUGADOR;
@@ -112,10 +130,12 @@ namespace NetworkObject
         public class JugadorReady: NetworkHeader
         {
             public int idJugador;
+            public string nombre;
             public JugadorReady()
             {
                 command = Commands.JUGADOR_READY;
                 idJugador = -1;
+                nombre = "";
             }
         }
 
@@ -130,6 +150,74 @@ namespace NetworkObject
             }
         }
 
+        [System.Serializable]
+        public class ItemMsg : NetworkHeader
+        {
+            public int indexItem;
+            public string tipo;
+            public ItemMsg()
+            {
+                command = Commands.ITEM_GET;
+                indexItem = -1;
+                tipo = "";
+            }
+        }
+
+        [System.Serializable]
+        public class DisparoMsg : NetworkHeader
+        {
+            public int idPlayer;
+            public DisparoMsg()
+            {
+                command = Commands.DISPARO;
+                idPlayer = -1;
+            }
+        }
+
+        [System.Serializable]
+        public class ActivarArenaMsg : NetworkHeader
+        {
+            public int idPlayer;
+            public ActivarArenaMsg()
+            {
+                command = Commands.ACTIVAR_ARENA;
+                idPlayer = -1;
+            }
+        }
+
+        [System.Serializable]
+        public class ArenaMsg : NetworkHeader
+        {
+            public int idJugador;
+            public ArenaMsg()
+            {
+                command = Commands.ARENA;
+                idJugador = -1;
+            }
+        }
+
+        [System.Serializable]
+        public class FinPlayerMsg : NetworkHeader
+        {
+            public int idJugador;
+            public FinPlayerMsg()
+            {
+                command = Commands.FIN_PLAYER;
+                idJugador = -1;
+            }
+        }
+
+        [System.Serializable]
+        public class TiempoMsg : NetworkHeader
+        {
+            public float min, sec;
+            public TiempoMsg()
+            {
+                command = Commands.TIEMPO;
+                min = 0;
+                sec = 0;
+            }
+        }
     }
 
 }

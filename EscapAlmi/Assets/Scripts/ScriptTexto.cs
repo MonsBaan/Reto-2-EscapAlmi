@@ -19,7 +19,7 @@ public class ScriptTexto : MonoBehaviour
     void seguirJugador()
     {
         Vector3 posJugador = jugador.transform.position;
-        this.transform.position = new Vector3(posJugador.x, posJugador.y + 2, posJugador.z - 1);
+        this.transform.position = new Vector3(posJugador.x, posJugador.y + 2, posJugador.z + 0.5f);
     }
 }
 
