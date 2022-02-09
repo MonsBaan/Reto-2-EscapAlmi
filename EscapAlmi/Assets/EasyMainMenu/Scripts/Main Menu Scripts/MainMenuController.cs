@@ -61,6 +61,7 @@ public class MainMenuController : MonoBehaviour
     public static List<string> arraySkinsJugador;
     public List<ResTiendaSymfony> arraySkinsTienda;
     public static int skinActual = -1;
+    public static string skinActualName = "";
     public static int precioSkinActual;
     public List<Material> arrayInventario;
     private int materialActInv = -1;
@@ -504,7 +505,7 @@ public class MainMenuController : MonoBehaviour
                 {
                     for (int i = 0; i < res.Length; i++)
                     {
-                        string objeto = res[i].nombre;
+                        string objeto = res[i].nombre; //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
                         arraySkinsJugador.Add(objeto);
                     }
@@ -730,6 +731,8 @@ public class MainMenuController : MonoBehaviour
     public void btnEquipar()
     {
         skinActual = materialActInv;
+        skinActualName = arrayInventario[materialActInv].name;
+        Debug.Log(skinActualName);
         cambiarBotonEquipar();
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   server: {fileID: 1404552671}
   cliente: {fileID: 576012220}
   arrayMapas:
-  - {fileID: 5101832987953131461, guid: 277d2cfea9e35ba439b527a00c6c764d, type: 3}
+  - {fileID: 568274936738092316, guid: ed01d7fa2e5dd4e4a8022b97d2685cd1, type: 3}
   textoSalida: {fileID: 1389215346}
   tiempoRespawnItems: 10
   secTotal: 0

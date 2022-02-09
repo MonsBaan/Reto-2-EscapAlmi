@@ -50,15 +50,16 @@ public class ElegirMapa : MonoBehaviour
         min = Mathf.FloorToInt(secTotal / 60F);
         sec = Mathf.FloorToInt(secTotal - min * 60);
 
-        if (min == 5)
+        if (min >= 5)
         {
-            //GameObject.Find("Server").GetComponent<Server>().terminarPartida();
+            GameObject.Find("Server").GetComponent<Server>().terminarPartida();
 
         }
         else if (min >= 4)
         {
             GameObject.Find("Tiempo").GetComponent<Text>().color = Color.red;
             textoSalida.GetComponent<Text>().color = Color.red;
+            textoSalida.GetComponent<Text>().text = "Se Acaba El Tiempo!!";
         }
         else if (min >= 1)
         {
@@ -80,7 +81,7 @@ public class ElegirMapa : MonoBehaviour
         string niceTime = string.Format("{0:0}:{1:00}", min, sec);
         GameObject.Find("Tiempo").GetComponent<Text>().text = niceTime;
 
-        secTotal += 1;
+        secTotal += Time.deltaTime;
 
         TiempoMsg tiempo = new TiempoMsg();
         tiempo.min = min;

@@ -59,7 +59,19 @@ public class Server : MonoBehaviour
         //LE ASIGNO EL PRIMER JUGADOR AL SERVIDOR
         myPlayer = jugadoresSimulados[0];
         myPlayer.GetComponent<MovimientoJugador>().enabled = true;
-        myPlayer.GetComponent<JugadorSimuladoScript>().enabled = false;
+        myPlayer.GetComponent<JugadorSimuladoScript>().enabled = false; 
+        if (MainMenuController.skinActualName != "")
+        {
+            foreach (var material in MainMenuController.materialesStatic)
+            {
+                if (material.name == MainMenuController.skinActualName)
+                {
+                    myPlayer.GetComponent<MeshRenderer>().material = material;
+
+                }
+            }
+        }
+        
         myText = jugadoresNombres[0];
         myText.SetActive(true);
         myText.GetComponent<ScriptTexto>().jugador = myPlayer;
@@ -352,8 +364,10 @@ public class Server : MonoBehaviour
 
     async void moverJugadorData(MoverMsg moverRecMsg)
     {
-        if (moverRecMsg.skin != -1)
-            jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)].GetComponent<MeshRenderer>().material = MainMenuController.materialesStatic[moverRecMsg.skin + 1];
+        for (int i = 0; i < m_connections.Length; i++)
+        {
+            SendToClient(JsonUtility.ToJson(moverRecMsg), m_connections[i]);
+        }
 
         if (moverRecMsg.jugador.id != "0")
         {
@@ -366,10 +380,17 @@ public class Server : MonoBehaviour
             texto.transform.position = moverRecMsg.posTextJugador;
         }
 
-        for (int i = 0; i < m_connections.Length; i++)
+
+        foreach (var material in MainMenuController.materialesStatic)
         {
-            SendToClient(JsonUtility.ToJson(moverRecMsg), m_connections[i]);
+            if (material.name == moverRecMsg.nombreSkin)
+            {
+                jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)].GetComponent<MeshRenderer>().material = material;
+
+            }
         }
+
+
     }
     #endregion
 
@@ -380,7 +401,7 @@ public class Server : MonoBehaviour
         moverMsg.jugador.posJugador = pos;
         moverMsg.jugador.rotacion = rotacion;
         moverMsg.jugador.nombre = MainMenuController.nombreCuentaJugador;
-        moverMsg.skin = MainMenuController.skinActual;
+        moverMsg.nombreSkin = MainMenuController.skinActualName;
 
         moverMsg.posTextJugador = myText.transform.position;
 

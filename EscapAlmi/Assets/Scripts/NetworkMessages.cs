@@ -108,7 +108,7 @@ namespace NetworkObject
         {
             public NetworkObject.Jugador jugador;
             public Vector3 posTextJugador;
-            public int skin;
+            public string nombreSkin;
             public MoverMsg()
             {
                 command = Commands.MOVER_JUGADOR;

@@ -277,9 +277,6 @@ public class NetworkClient : MonoBehaviour
 
     void moveJugadorMsg(MoverMsg moverRecMsg)
     {
-        if (moverRecMsg.skin != -1)
-            jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)].GetComponent<MeshRenderer>().material = MainMenuController.materialesStatic[moverRecMsg.skin+1];
-
 
         if (moverRecMsg.jugador.id != idPlayer)
         {
@@ -297,6 +294,15 @@ public class NetworkClient : MonoBehaviour
 
             texto.transform.position = moverRecMsg.posTextJugador;
         }
+
+        foreach (var material in MainMenuController.materialesStatic)
+        {
+            if (material.name == moverRecMsg.nombreSkin)
+            {
+                jugadoresSimulados[int.Parse(moverRecMsg.jugador.id)].GetComponent<MeshRenderer>().material = material;
+
+            }
+        }
     }
 
 
@@ -307,7 +313,7 @@ public class NetworkClient : MonoBehaviour
         moverMsg.jugador.nombre = MainMenuController.nombreCuentaJugador;
         moverMsg.jugador.posJugador = pos;
         moverMsg.jugador.rotacion = rotacion;
-        moverMsg.skin = MainMenuController.skinActual;
+        moverMsg.nombreSkin = MainMenuController.skinActualName;
 
         moverMsg.posTextJugador = myText.transform.position;
 
